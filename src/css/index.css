@@ -2,6 +2,6 @@ body {
   background-color: rgb(57 57 57);
 }
 
-* {
-  color: white;
+label {
+  color: white !important;
 }

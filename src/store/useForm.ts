@@ -5,8 +5,8 @@ export const useForm = defineStore('form', {
     return {
       form: {
         informationType: 'form' || 'url',
-        date: Number,
-        title: String,
+        date: 0,
+        title: '',
         data: {
           components: Array<object>,
         },

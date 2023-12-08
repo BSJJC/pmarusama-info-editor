@@ -1,9 +1,6 @@
 <template>
   <div>
-    <el-radio-group v-model="form.informationType">
-      <el-radio label="form">form</el-radio>
-      <el-radio label="url">url</el-radio>
-    </el-radio-group>
+    <el-input v-model="form.title" class="w-[300px]" />
   </div>
 </template>
 
