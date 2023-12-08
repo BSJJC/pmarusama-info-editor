@@ -21,6 +21,7 @@
             :label="`component ${i.value} :`"
           >
             <DynamicComponent
+              :component-id="index"
               :component-name="i.value"
               :data="form.data.components[index].data"
             ></DynamicComponent>
@@ -71,6 +72,10 @@ const newComponentNames: Ref<
   {
     value: 'h2',
     label: 'h2',
+  },
+  {
+    value: 'p',
+    label: 'p',
   },
 ]);
 

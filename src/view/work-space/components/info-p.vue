@@ -1,6 +1,8 @@
 <template>
   <div>
-    <el-input v-model="form.data.components[props.componentId!].data.text" />
+    <div v-for="(i, index) in props.data?.text" :key="index">
+      <el-input v-model="props" />
+    </div>
   </div>
 </template>
 
@@ -10,11 +12,10 @@ import { useForm } from '@/store/useForm';
 const { form } = useForm();
 
 type TData = {
-  text: string;
+  text: Array<string | null>;
 };
 
 const props = defineProps({
-  componentId: Number,
   data: Object as () => TData,
 });
 </script>

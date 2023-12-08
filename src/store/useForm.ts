@@ -1,8 +1,12 @@
 import { defineStore } from 'pinia';
 
+type TData = object & {
+  text?: string;
+};
+
 type TComponent = {
   componentName: string;
-  data: object;
+  data: TData;
 };
 
 export const useForm = defineStore('form', {
