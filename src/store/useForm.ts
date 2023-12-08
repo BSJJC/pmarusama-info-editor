@@ -1,5 +1,10 @@
 import { defineStore } from 'pinia';
 
+type TComponent = {
+  componentName: string;
+  data: object;
+};
+
 export const useForm = defineStore('form', {
   state: () => {
     return {
@@ -8,7 +13,7 @@ export const useForm = defineStore('form', {
         date: 0,
         title: '',
         data: {
-          components: Array<object>,
+          components: [] as TComponent[],
         },
       },
     };
