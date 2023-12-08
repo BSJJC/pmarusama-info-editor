@@ -1,0 +1,75 @@
+:root {
+    --main-color: #f60;
+}
+
+* {
+    -webkit-user-drag: none;
+    color: #787878;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+a {
+    color: #f60;
+}
+
+.lace-top::before {
+    position: absolute;
+    content: "";
+    margin: auto;
+    box-sizing: border-box;
+    vertical-align: middle;
+    top: -6px;
+    left: 0px;
+    width: 100%;
+    height: 6px;
+    background: url('../assets/imgs/section-bg-top.png') center bottom/auto 100%;
+}
+
+.lace-bottom::after {
+    position: absolute;
+    content: "";
+    margin: auto;
+    box-sizing: border-box;
+    vertical-align: middle;
+    bottom: -6px;
+    width: 100%;
+    height: 6px;
+    background: url('../assets/imgs/section-bg-bottom.png') center bottom/auto 100%;
+}
+
+@media (width>=768px) {
+    .lace-top::before {
+        position: absolute;
+        content: "";
+        margin: auto;
+        box-sizing: border-box;
+        vertical-align: middle;
+        top: -12px;
+        left: 0px;
+        width: 100%;
+        height: 12px;
+        background: url('../assets/imgs/section-bg-top.png') center bottom/auto 100%;
+    }
+}
+
+@media (width>=768px) {
+    .lace-bottom::after {
+        position: absolute;
+        content: "";
+        margin: auto;
+        box-sizing: border-box;
+        vertical-align: middle;
+        bottom: -12px;
+        width: 100%;
+        height: 12px;
+        background: url('../assets/imgs/section-bg-bottom.png') center bottom/auto 100%;
+    }
+}
+
+::selection {
+    color: whitesmoke;
+    background: #f60;
+}
