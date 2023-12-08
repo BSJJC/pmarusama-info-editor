@@ -68,6 +68,10 @@ const newComponentNames: Ref<
     value: 'h1',
     label: 'h1',
   },
+  {
+    value: 'h2',
+    label: 'h2',
+  },
 ]);
 
 const dynamicComponents: Ref<Array<{ value: string }>> = ref([]);
