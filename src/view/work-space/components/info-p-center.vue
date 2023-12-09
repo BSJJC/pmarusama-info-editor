@@ -2,13 +2,14 @@
   <div class="flex flex-col space-y-4">
     <div v-for="i in (form.data.components[props.componentId!].data as TData).text.length" :key="i">
       <el-input
+        id="textarea-center"
         v-if="(form.data.components[props.componentId!].data as TData).text[i - 1] !== null"
         type="textarea"
         class="w-[300px]"
         v-model="(form.data.components[props.componentId!].data as TData).text[i - 1]"
       />
 
-      <div v-else class="mx-1 text-[#e6a23c] text-[1rem]">
+      <div v-else class="mx-1 text-center text-[#e6a23c] text-[1rem]">
         <b>an empty line here</b>
       </div>
     </div>
@@ -52,4 +53,8 @@ function addEmptyLine(): void {
 }
 </script>
 
-<style></style>
+<style>
+#textarea-center {
+  text-align: center;
+}
+</style>

@@ -77,6 +77,10 @@ const newComponentNames: Ref<
     value: 'p',
     label: 'p',
   },
+  {
+    value: 'p-center',
+    label: 'p-center',
+  },
 ]);
 
 const dynamicComponents: Ref<Array<{ value: string }>> = ref([]);
