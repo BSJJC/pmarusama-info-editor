@@ -14,12 +14,23 @@
           <InfoTitle></InfoTitle>
         </el-form-item>
 
-        <TransitionGroup name="dynamic">
+        <TransitionGroup name="dynamic" tag="div" class="relative">
           <el-form-item
             v-for="(i, index) in dynamicComponents"
-            :key="index"
+            :key="i"
             :label="`component ${i.value} :`"
+            class="py-4 relative w-[400px]"
           >
+            <div class="absolute top-[-15px] left-[410px]">
+              <el-icon
+                color="#F56C6C"
+                class="hover:cursor-pointer"
+                @click="deleteDynamicComponent(index)"
+              >
+                <CloseBold />
+              </el-icon>
+            </div>
+
             <DynamicComponent
               :component-id="index"
               :component-name="i.value"
@@ -48,8 +59,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, watch } from 'vue';
+import { ref, Ref, watch, h } from 'vue';
 import { useForm } from '@/store/useForm';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 import DynamicComponent from './dynamic-component.vue';
 import InfoType from './components/info-type.vue';
@@ -94,6 +106,38 @@ function addDynamicComponent(): void {
   dynamicComponents.value.push({
     value: newComponentName.value,
   });
+
+  newComponentName.value = '';
+}
+
+function deleteDynamicComponent(index: number): void {
+  ElMessageBox.confirm(
+    h('div', null, [
+      h('span', null, 'Are you sure you want to delete component: '),
+      h('b', null, `${dynamicComponents.value[index].value}`),
+    ]),
+    {
+      confirmButtonText: 'YES',
+      cancelButtonText: 'NO',
+      type: 'warning',
+      draggable: true,
+    },
+  )
+    .then(() => {
+      ElMessage({
+        type: 'success',
+        message: `Component ${dynamicComponents.value[index].value} deleted`,
+      });
+
+      form.data.components.slice(index, 1);
+      dynamicComponents.value.splice(index, 1);
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: 'Delete canceled',
+      });
+    });
 }
 
 watch(
@@ -108,14 +152,19 @@ watch(
 </script>
 
 <style scoped>
+.dynamic-move,
 .dynamic-enter-active,
 .dynamic-leave-active {
-  transition: all 0.5s ease;
+  transition: all 0.3s ease-in-out;
 }
 
 .dynamic-enter-from,
 .dynamic-leave-to {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateX(30px);
+}
+
+.dynamic-leave-active {
+  position: absolute;
 }
 </style>

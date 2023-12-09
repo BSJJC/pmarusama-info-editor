@@ -1,6 +1,10 @@
 <template>
   <div class="flex flex-col space-y-4">
-    <div v-for="i in (form.data.components[props.componentId!].data as TData).text.length" :key="i">
+    <div
+      v-for="i in (form.data.components[props.componentId!].data as TData).text.length"
+      :key="i"
+      class="w-[400px] flex justify-between items-center"
+    >
       <el-input
         id="textarea-center"
         v-if="(form.data.components[props.componentId!].data as TData).text[i - 1] !== null"
@@ -9,14 +13,16 @@
         v-model="(form.data.components[props.componentId!].data as TData).text[i - 1]"
       />
 
-      <div v-else class="mx-1 text-center text-[#e6a23c] text-[1rem]">
+      <div v-else class="w-full text-center mx-1 text-[#e6a23c] text-[1rem]">
         <b>an empty line here</b>
       </div>
+
+      <el-button type="danger" plain @click="deleteLine(i - 1)">delete</el-button>
     </div>
 
     <div>
-      <el-button @click="addNewLine">start a new line</el-button>
-      <el-button @click="addEmptyLine">add an empty line</el-button>
+      <el-button @click="addNewLine" type="primary" plain>start a new line</el-button>
+      <el-button @click="addEmptyLine" type="warning" plain>add an empty line</el-button>
     </div>
   </div>
 </template>
@@ -38,18 +44,16 @@ const { form } = useForm();
 // initial text array
 (form.data.components[props.componentId!].data as TData).text = [''];
 
-/**
- * add a new string line to text array.
- */
 function addNewLine(): void {
   (form.data.components[props.componentId!].data as TData).text.push('');
 }
 
-/**
- * add a null to text array, which means an empty line.
- */
 function addEmptyLine(): void {
   (form.data.components[props.componentId!].data as TData).text.push(null);
+}
+
+function deleteLine(index: number) {
+  (form.data.components[props.componentId!].data as TData).text.splice(index, 1);
 }
 </script>
 

@@ -2,7 +2,7 @@
   <div>
     <el-input
       v-model="(form.data.components[props.componentId!].data as TData).text"
-      class="w-[300px]"
+      class="w-[400px]"
     />
   </div>
 </template>
