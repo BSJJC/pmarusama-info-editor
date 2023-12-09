@@ -40,8 +40,8 @@
         </TransitionGroup>
 
         <el-form-item label="information title :">
-          <div class="w-[300px] flex justify-between">
-            <el-select v-model="newComponentName" placeholder="new component">
+          <div class="w-[400px] flex justify-between">
+            <el-select v-model="newComponentName" placeholder="new component" class="w-[300px]">
               <el-option
                 v-for="name in newComponentNames"
                 :key="name.value"

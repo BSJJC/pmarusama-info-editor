@@ -17,7 +17,14 @@
         <b>an empty line here</b>
       </div>
 
-      <el-button type="danger" plain @click="deleteLine(i - 1)">delete</el-button>
+      <el-button
+        :disabled="(form.data.components[props.componentId!].data as TData).text.length <= 1"
+        type="danger"
+        plain
+        @click="deleteLine(i - 1)"
+      >
+        delete
+      </el-button>
     </div>
 
     <div>
