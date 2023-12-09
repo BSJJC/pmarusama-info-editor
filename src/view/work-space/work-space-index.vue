@@ -1,5 +1,5 @@
 <template>
-  <div class="w-1/2 p-10">
+  <div class="w-full p-10">
     <el-scrollbar height="90vh">
       <el-form ref="formRef" :model="form" label-width="200px">
         <el-form-item label="information type :">

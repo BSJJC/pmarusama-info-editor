@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-input-number v-model="form.date" class="w-[300px]" />
+    <el-input-number v-model="form.date" class="w-[400px]" />
   </div>
 </template>
 

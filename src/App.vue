@@ -2,7 +2,7 @@
   <div class="w-full h-screen flex flex-row">
     <WorkSpaceIndex></WorkSpaceIndex>
 
-    <PreviewIndex></PreviewIndex>
+    <!-- <PreviewIndex></PreviewIndex> -->
   </div>
 </template>
 
