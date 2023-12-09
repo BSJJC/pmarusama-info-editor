@@ -23,7 +23,7 @@
             <DynamicComponent
               :component-id="index"
               :component-name="i.value"
-              :data="form.data.components[index].data"
+              :data="form.data.components[index].data!"
             ></DynamicComponent>
           </el-form-item>
         </TransitionGroup>
@@ -93,7 +93,7 @@ function addDynamicComponent(): void {
 }
 
 watch(
-  () => form,
+  () => form.data.components,
   () => {
     console.log(form.data.components);
   },

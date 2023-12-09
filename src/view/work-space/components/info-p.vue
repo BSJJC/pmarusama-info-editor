@@ -1,8 +1,12 @@
 <template>
   <div>
-    <div v-for="(i, index) in props.data?.text" :key="index">
-      <el-input v-model="props" />
-    </div>
+    <el-input
+      type="textarea"
+      class="w-[300px]"
+      v-for="i in Math.max(props.data!.text.length - 1, 1)"
+      :key="i"
+      v-model="(form.data.components[props.componentId!].data as TData).text[i - 1]"
+    />
   </div>
 </template>
 
@@ -16,8 +20,11 @@ type TData = {
 };
 
 const props = defineProps({
-  data: Object as () => TData,
+  componentId: Number,
+  data: Object,
 });
+
+(form.data.components[props.componentId!].data as TData).text = [];
 </script>
 
 <style></style>

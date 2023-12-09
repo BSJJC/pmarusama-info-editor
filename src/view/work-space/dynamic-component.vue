@@ -19,8 +19,6 @@ const props = defineProps({
   data: Object,
 });
 
-console.log(props.componentId);
-
 import(`./components/info-${props.componentName}.vue`).then((component) => {
   dynamicComponent.value = component.default;
 });

@@ -1,6 +1,9 @@
 <template>
   <div>
-    <el-input v-model="form.data.components[props.componentId!].data.text" />
+    <el-input
+      v-model="(form.data.components[props.componentId!].data as TData).text"
+      class="w-[300px]"
+    />
   </div>
 </template>
 
@@ -15,7 +18,7 @@ type TData = {
 
 const props = defineProps({
   componentId: Number,
-  data: Object as () => TData,
+  data: Object,
 });
 </script>
 
