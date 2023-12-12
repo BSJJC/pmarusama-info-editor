@@ -24,4 +24,8 @@ export const newComponentNames: Array<TNewComponentName> = [
     value: 'images',
     label: 'images',
   },
+  {
+    value: 'images-center',
+    label: 'images-center',
+  },
 ];

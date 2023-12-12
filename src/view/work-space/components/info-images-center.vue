@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-form>
-      <div v-for="(image, index) in images" :key="index" class="mb-14 w-[400px] flex items-center">
-        <div class="w-[300px] space-y-3">
+      <div v-for="(image, index) in images" :key="index" class="mb-4 w-[400px] flex items-center">
+        <div class="w-[300px] space-y-2">
           <el-form-item label="url: ">
             <el-input v-model="image.url" />
           </el-form-item>
@@ -15,7 +15,7 @@
             <el-form-item v-if="image.url" label="preview: ">
               <el-image :src="image.url" />
 
-              <span>{{ image.alt }}</span>
+              <span class="w-full text-center">{{ image.alt }}</span>
             </el-form-item>
           </Transition>
         </div>
@@ -81,7 +81,7 @@ watch(
 );
 </script>
 
-<style>
+<style scoped>
 .v-enter-active,
 .v-leave-active {
   transition: all 0.2s ease-in-out;
