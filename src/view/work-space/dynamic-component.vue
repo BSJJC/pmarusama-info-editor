@@ -1,10 +1,6 @@
 <template>
   <div>
-    <component
-      :is="dynamicComponent"
-      :componentId="props.componentId"
-      :data="props.data"
-    ></component>
+    <component :is="dynamicComponent" :componentId="props.componentId"></component>
   </div>
 </template>
 
@@ -16,7 +12,6 @@ const dynamicComponent = shallowRef();
 const props = defineProps({
   componentId: Number,
   componentName: String,
-  data: Object,
 });
 
 import(`./components/info-${props.componentName}.vue`).then((component) => {

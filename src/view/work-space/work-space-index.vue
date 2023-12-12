@@ -31,11 +31,7 @@
               </el-icon>
             </div>
 
-            <DynamicComponent
-              :component-id="index"
-              :component-name="i.value"
-              :data="form.data.components[index].data!"
-            ></DynamicComponent>
+            <DynamicComponent :component-id="index" :component-name="i.value"></DynamicComponent>
           </el-form-item>
         </TransitionGroup>
 
@@ -62,6 +58,7 @@
 import { ref, Ref, watch, h } from 'vue';
 import { useForm } from '@/store/useForm';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { newComponentNames } from './newComponentNames.ts';
 
 import DynamicComponent from './dynamic-component.vue';
 import InfoType from './components/info-type.vue';
@@ -71,29 +68,6 @@ import InfoTitle from './components/info-title.vue';
 const { form } = useForm();
 
 const newComponentName: Ref<string> = ref('');
-const newComponentNames: Ref<
-  {
-    value: string;
-    label: string;
-  }[]
-> = ref([
-  {
-    value: 'h1',
-    label: 'h1',
-  },
-  {
-    value: 'h2',
-    label: 'h2',
-  },
-  {
-    value: 'p',
-    label: 'p',
-  },
-  {
-    value: 'p-center',
-    label: 'p-center',
-  },
-]);
 
 const dynamicComponents: Ref<Array<{ value: string }>> = ref([]);
 
@@ -143,7 +117,7 @@ function deleteDynamicComponent(index: number): void {
 watch(
   () => form.data.components,
   () => {
-    console.log(form.data.components);
+    console.log(form);
   },
   {
     deep: true,
@@ -168,3 +142,4 @@ watch(
   position: absolute;
 }
 </style>
+./newComponentNames.ts

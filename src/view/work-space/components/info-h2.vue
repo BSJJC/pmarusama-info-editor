@@ -18,7 +18,6 @@ type TData = {
 
 const props = defineProps({
   componentId: Number,
-  data: Object,
 });
 </script>
 

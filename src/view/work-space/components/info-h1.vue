@@ -18,7 +18,6 @@ const { form } = useForm();
 
 const props = defineProps({
   componentId: Number,
-  data: Object,
 });
 </script>
 
