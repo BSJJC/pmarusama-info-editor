@@ -49,6 +49,10 @@
             <el-button :disabled="!newComponentName" @click="addDynamicComponent">add</el-button>
           </div>
         </el-form-item>
+
+        <el-form-item class="mt-[10vh]">
+          <el-button type="primary" plain round class="w-[400px] h-[5vh]">submit</el-button>
+        </el-form-item>
       </el-form>
     </el-scrollbar>
   </div>
