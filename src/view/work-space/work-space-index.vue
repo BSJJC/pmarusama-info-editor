@@ -107,7 +107,7 @@ function deleteDynamicComponent(index: number): void {
         message: `Component ${dynamicComponents.value[index].value} deleted`,
       });
 
-      form.data.components.slice(index, 1);
+      form.data.components.splice(index, 1);
       dynamicComponents.value.splice(index, 1);
     })
     .catch(() => {
@@ -121,7 +121,7 @@ function deleteDynamicComponent(index: number): void {
 watch(
   () => form.data.components,
   () => {
-    console.log(form);
+    console.log(form.data.components);
   },
   {
     deep: true,

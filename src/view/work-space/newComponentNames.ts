@@ -28,4 +28,8 @@ export const newComponentNames: Array<TNewComponentName> = [
     value: 'images-center',
     label: 'images-center',
   },
+  {
+    value: 'table',
+    label: 'table',
+  },
 ];
