@@ -62,7 +62,7 @@
 import { ref, Ref, watch, h } from 'vue';
 import { useForm } from '@/store/useForm';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { newComponentNames } from './newComponentNames.ts';
+import newComponentNames from './newComponentNames.ts';
 
 import DynamicComponent from './dynamic-component.vue';
 import InfoType from './components/info-type.vue';

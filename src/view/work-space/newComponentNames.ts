@@ -3,7 +3,7 @@ type TNewComponentName = {
   label: string;
 };
 
-export const newComponentNames: Array<TNewComponentName> = [
+const newComponentNames: Array<TNewComponentName> = [
   {
     value: 'h1',
     label: 'h1',
@@ -33,3 +33,5 @@ export const newComponentNames: Array<TNewComponentName> = [
     label: 'table',
   },
 ];
+
+export default newComponentNames;
