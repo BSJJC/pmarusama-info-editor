@@ -47,7 +47,11 @@
       </el-form>
     </div>
 
-    <el-dialog v-model="setTextVisible" title="Outer Dialog" draggable>
+    <el-dialog
+      v-model="setTextVisible"
+      :title="`row: ${editingRowIndex + 1} col: ${editingColIndex + 1}`"
+      draggable
+    >
       <template #default>
         <el-form>
           <el-form-item label="text: ">
@@ -57,8 +61,8 @@
       </template>
 
       <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="setTextVisible = false">Cancel</el-button>
+        <span>
+          <el-button @click="cancelSetText">Cancel</el-button>
           <el-button type="primary" @click="setTextVisible = false" plain>Confirm</el-button>
         </span>
       </template>
@@ -109,6 +113,12 @@ function setText(index: number): void {
   editingColIndex.value = calculateColPosition(index);
 
   setTextVisible.value = true;
+}
+
+function cancelSetText(): void {
+  text.value[editingRowIndex.value][editingColIndex.value] = [];
+
+  setTextVisible.value = false;
 }
 
 watch(
