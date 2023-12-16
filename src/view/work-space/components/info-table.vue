@@ -10,22 +10,20 @@
       <div
         v-for="id in rows * cols"
         :key="id"
-        class="w-[50px] h-[50px] m-[5px] bg-[#a6a9ad] transition-all duration-75 ease-in-out hover:rounded-lg hover:cursor-pointer hover:shadow-lg hover:translate-y-[-5px]"
+        class="w-[50px] h-[50px] m-[5px] bg-[#409EFF] rounded-md transition-all duration-300 ease-in-out hover:cursor-pointer hover:shadow-lg hover:translate-y-[-5px]"
+        @click="setText(id)"
       >
         {{ id }}
       </div>
     </div>
 
-    <el-dialog v-model="outerVisible" title="Outer Dialog">
+    <el-dialog v-model="setTextVisible" title="Outer Dialog" draggable>
       <template #default>
-        <el-dialog v-model="innerVisible" width="30%" title="Inner Dialog" append-to-body />
-      </template>
-
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="outerVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="innerVisible = true">open the inner Dialog</el-button>
-        </div>
+        <el-form>
+          <el-form-item label="text: ">
+            <el-input v-model="text[editingRowIndex][editingColIndex]" />
+          </el-form-item>
+        </el-form>
       </template>
     </el-dialog>
 
@@ -44,21 +42,54 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref } from 'vue';
+import { ref, Ref, watch } from 'vue';
 
-type TText = Array<Array<string | null>>;
+type TText = Array<Array<Array<string | null>>>;
 
 const rows: Ref<number> = ref(3);
 const cols: Ref<number> = ref(3);
+const editingRowIndex: Ref<number> = ref(0);
+const editingColIndex: Ref<number> = ref(0);
 
-const text: TText = [];
+const text: Ref<TText> = ref(generateTextArray());
 
-const outerVisible = ref(false);
-const innerVisible = ref(false);
+const setTextVisible = ref(false);
 
-setTimeout(() => {
-  outerVisible.value = true;
-}, 1000);
+function generateTextArray(): TText {
+  let arr: TText = [];
+
+  for (let row = 0; row < rows.value; row++) {
+    arr.push([] as Array<Array<string | null>>);
+
+    for (let col = 0; col < cols.value; col++) {
+      arr[row].push([]);
+    }
+  }
+
+  return arr;
+}
+
+function setText(index: number): void {
+  // Because the index traversed through v-for starts from 1, you need to manually decrease it by one.
+  editingRowIndex.value = Math.floor((index - 1) / cols.value);
+  editingColIndex.value = Math.floor((index - 1) % cols.value);
+
+  console.log(editingRowIndex.value);
+  console.log(editingColIndex.value);
+
+  setTextVisible.value = true;
+}
+
+watch(
+  () => text.value,
+  () => {
+    console.log(text.value);
+  },
+  {
+    immediate: true,
+    deep: true,
+  },
+);
 </script>
 
 <style></style>
