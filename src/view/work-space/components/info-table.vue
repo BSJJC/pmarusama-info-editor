@@ -17,16 +17,6 @@
       </div>
     </div>
 
-    <el-dialog v-model="setTextVisible" title="Outer Dialog" draggable>
-      <template #default>
-        <el-form>
-          <el-form-item label="text: ">
-            <el-input v-model="text[editingRowIndex][editingColIndex]" />
-          </el-form-item>
-        </el-form>
-      </template>
-    </el-dialog>
-
     <div>
       <el-form label-width="50px" class="space-y-2">
         <el-form-item label="rows: ">
@@ -38,6 +28,23 @@
         </el-form-item>
       </el-form>
     </div>
+
+    <el-dialog v-model="setTextVisible" title="Outer Dialog" draggable>
+      <template #default>
+        <el-form>
+          <el-form-item label="text: ">
+            <el-input v-model="text[editingRowIndex][editingColIndex]" />
+          </el-form-item>
+        </el-form>
+      </template>
+
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="setTextVisible = false">Cancel</el-button>
+          <el-button type="primary" plain>Confirm</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -81,14 +88,19 @@ function setText(index: number): void {
 }
 
 watch(
+  () => [rows.value, cols.value],
+  () => {
+    text.value = generateTextArray();
+  },
+  { immediate: true, deep: true },
+);
+
+watch(
   () => text.value,
   () => {
     console.log(text.value);
   },
-  {
-    immediate: true,
-    deep: true,
-  },
+  { immediate: true, deep: true },
 );
 </script>
 
