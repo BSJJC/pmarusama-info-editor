@@ -10,10 +10,28 @@
       <div
         v-for="id in rows * cols"
         :key="id"
-        class="w-[50px] h-[50px] m-[5px] bg-[#409EFF] rounded-md transition-all duration-300 ease-in-out hover:cursor-pointer hover:shadow-lg hover:translate-y-[-5px]"
+        class="w-[50px] h-[50px] m-[5px] flex justify-center items-center text-white text-lg font-bold rounded-md transition-all duration-300 ease-in-out hover:cursor-pointer hover:shadow-lg hover:translate-y-[-5px]"
+        :style="{
+          backgroundColor: `${
+            text[calculateRowPosition(id)][calculateColPosition(id)].length === 0
+              ? '#909399'
+              : '#409EFF'
+          }`,
+        }"
         @click="setText(id)"
       >
-        {{ id }}
+        {{ text[calculateRowPosition(id)][calculateColPosition(id)][0] }}
+      </div>
+    </div>
+
+    <div class="flex items-end flex-col space-y-2">
+      <div class="flex space-x-2">
+        <span>Unedited:</span>
+        <div class="w-[30px] h-[30px] bg-[#909399] rounded-md"></div>
+      </div>
+      <div class="flex space-x-2">
+        <span>Edited:</span>
+        <div class="w-[30px] h-[30px] bg-[#409EFF] rounded-md"></div>
       </div>
     </div>
 
@@ -41,7 +59,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="setTextVisible = false">Cancel</el-button>
-          <el-button type="primary" plain>Confirm</el-button>
+          <el-button type="primary" @click="setTextVisible = false" plain>Confirm</el-button>
         </span>
       </template>
     </el-dialog>
@@ -76,13 +94,19 @@ function generateTextArray(): TText {
   return arr;
 }
 
-function setText(index: number): void {
+function calculateRowPosition(index: number): number {
   // Because the index traversed through v-for starts from 1, you need to manually decrease it by one.
-  editingRowIndex.value = Math.floor((index - 1) / cols.value);
-  editingColIndex.value = Math.floor((index - 1) % cols.value);
+  return Math.floor((index - 1) / cols.value);
+}
 
-  console.log(editingRowIndex.value);
-  console.log(editingColIndex.value);
+function calculateColPosition(index: number): number {
+  // Because the index traversed through v-for starts from 1, you need to manually decrease it by one.
+  return Math.floor((index - 1) % cols.value);
+}
+
+function setText(index: number): void {
+  editingRowIndex.value = calculateRowPosition(index);
+  editingColIndex.value = calculateColPosition(index);
 
   setTextVisible.value = true;
 }
