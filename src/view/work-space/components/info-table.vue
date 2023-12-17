@@ -10,7 +10,7 @@
       <div
         v-for="id in rows * cols"
         :key="id"
-        :id="`editingBlockRef-${id}`"
+        :id="`editingBlockRef-${props.componentId}-${id}`"
         class="w-[50px] h-[50px] m-[5px] flex justify-center items-center text-white text-lg font-bold rounded-md transition-all duration-300 ease-in-out hover:cursor-pointer hover:shadow-lg hover:translate-y-[-5px]"
         :style="{
           backgroundColor: `${
@@ -176,7 +176,7 @@ function setText(index: number): void {
   editingRowIndex.value = calculateRowPosition(index);
   editingColIndex.value = calculateColPosition(index);
 
-  editingBlockRef.value = document.getElementById(`editingBlockRef-${index}`)!;
+  editingBlockRef.value = document.getElementById(`editingBlockRef-${props.componentId}-${index}`)!;
 
   editingBlockRef.value.classList.add('editing');
 
