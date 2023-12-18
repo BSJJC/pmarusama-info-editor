@@ -43,11 +43,11 @@
     <div>
       <el-form label-width="50px" class="space-y-2">
         <el-form-item label="rows: ">
-          <el-input-number v-model="rows" :min="1" :max="6" />
+          <el-input-number v-model="rows" :min="1" :max="10" />
         </el-form-item>
 
         <el-form-item label="cols: ">
-          <el-input-number v-model="cols" :min="1" :max="6" />
+          <el-input-number v-model="cols" :min="1" :max="10" />
         </el-form-item>
       </el-form>
     </div>
@@ -56,6 +56,7 @@
       v-model="setTextVisible"
       :title="`row: ${editingRowIndex + 1} col: ${editingColIndex + 1}`"
       draggable
+      class="rounded-lg"
       @close="checkOnClose"
     >
       <template #default>

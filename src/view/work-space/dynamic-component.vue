@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-full">
     <component :is="dynamicComponent" :componentId="props.componentId"></component>
   </div>
 </template>

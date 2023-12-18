@@ -1,59 +1,61 @@
 <template>
-  <div class="w-full p-10">
-    <el-scrollbar height="90vh">
-      <el-form ref="formRef" :model="form" label-width="200px">
-        <el-form-item label="information type :">
-          <InfoType></InfoType>
-        </el-form-item>
-
-        <el-form-item label="information date :">
-          <InfoDate></InfoDate>
-        </el-form-item>
-
-        <el-form-item label="information title :">
-          <InfoTitle></InfoTitle>
-        </el-form-item>
-
-        <TransitionGroup name="dynamic" tag="div" class="relative">
-          <el-form-item
-            v-for="(i, index) in dynamicComponents"
-            :key="i"
-            :label="`component ${i.value} :`"
-            class="py-4 relative w-[400px]"
-          >
-            <div class="absolute top-[-15px] left-[410px]">
-              <el-icon
-                color="#F56C6C"
-                class="hover:cursor-pointer"
-                @click="deleteDynamicComponent(index)"
-              >
-                <CloseBold />
-              </el-icon>
-            </div>
-
-            <DynamicComponent :component-id="index" :component-name="i.value"></DynamicComponent>
+  <div class="w-full py-10 flex justify-center">
+    <el-scrollbar height="90vh" class="w-full">
+      <div class="w-full flex justify-center items-center">
+        <el-form ref="formRef" :model="form" label-width="200px" class="w-2/3">
+          <el-form-item label="information type :">
+            <InfoType></InfoType>
           </el-form-item>
-        </TransitionGroup>
 
-        <el-form-item label="information title :">
-          <div class="w-[400px] flex justify-between">
-            <el-select v-model="newComponentName" placeholder="new component" class="w-[300px]">
-              <el-option
-                v-for="name in newComponentNames"
-                :key="name.value"
-                :label="name.label"
-                :value="name.value"
-              />
-            </el-select>
+          <el-form-item label="information date :">
+            <InfoDate></InfoDate>
+          </el-form-item>
 
-            <el-button :disabled="!newComponentName" @click="addDynamicComponent">add</el-button>
-          </div>
-        </el-form-item>
+          <el-form-item label="information title :">
+            <InfoTitle></InfoTitle>
+          </el-form-item>
 
-        <el-form-item class="mt-[10vh]">
-          <el-button type="primary" plain round class="w-[400px] h-[5vh]">submit</el-button>
-        </el-form-item>
-      </el-form>
+          <TransitionGroup name="dynamic" tag="div" class="relative">
+            <el-form-item
+              v-for="(i, index) in dynamicComponents"
+              :key="i"
+              :label="`component ${i.value} :`"
+              class="py-4 relative"
+            >
+              <div class="absolute top-[-15px] left-[410px]">
+                <el-icon
+                  color="#F56C6C"
+                  class="hover:cursor-pointer"
+                  @click="deleteDynamicComponent(index)"
+                >
+                  <CloseBold />
+                </el-icon>
+              </div>
+
+              <DynamicComponent :component-id="index" :component-name="i.value"></DynamicComponent>
+            </el-form-item>
+          </TransitionGroup>
+
+          <el-form-item label="information title :">
+            <div class="w-full flex justify-between">
+              <el-select v-model="newComponentName" placeholder="new component" class="w-[90%]">
+                <el-option
+                  v-for="name in newComponentNames"
+                  :key="name.value"
+                  :label="name.label"
+                  :value="name.value"
+                />
+              </el-select>
+
+              <el-button :disabled="!newComponentName" @click="addDynamicComponent">add</el-button>
+            </div>
+          </el-form-item>
+
+          <el-form-item class="mt-[15vh]">
+            <el-button type="primary" plain round class="w-full h-[5vh]">submit</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
     </el-scrollbar>
   </div>
 </template>

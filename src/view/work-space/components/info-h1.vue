@@ -1,9 +1,6 @@
 <template>
   <div>
-    <el-input
-      v-model="(form.data.components[props.componentId!].data as TData).text"
-      class="w-[400px]"
-    />
+    <el-input v-model="(form.data.components[props.componentId!].data as TData).text" />
   </div>
 </template>
 

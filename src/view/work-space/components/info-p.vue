@@ -1,16 +1,7 @@
 <template>
   <div class="flex flex-col space-y-4">
-    <div
-      v-for="(i, index) in text.length"
-      :key="i"
-      class="w-[400px] flex justify-between items-center"
-    >
-      <el-input
-        v-if="text[i - 1] !== null"
-        type="textarea"
-        class="w-[300px]"
-        v-model="text[index]"
-      />
+    <div v-for="(i, index) in text.length" :key="i" class="flex justify-between items-center">
+      <el-input v-if="text[i - 1] !== null" type="textarea" class="w-[80%]" v-model="text[index]" />
 
       <div v-else class="mx-1 text-[#e6a23c] text-[1rem]">
         <b>an empty line here</b>

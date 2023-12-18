@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-form>
-      <div v-for="(image, index) in images" :key="index" class="mb-14 w-[400px] flex items-center">
-        <div class="w-[300px] space-y-3">
+      <div v-for="(image, index) in images" :key="index" class="mb-14 flex items-center">
+        <div class="space-y-3 w-[80%]">
           <el-form-item label="url: ">
             <el-input v-model="image.url" />
           </el-form-item>

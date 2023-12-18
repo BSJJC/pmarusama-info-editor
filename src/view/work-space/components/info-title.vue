@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-input v-model="form.title" class="w-[400px]" placeholder="information title" />
+  <div class="w-full">
+    <el-input v-model="form.title" class="w-full" placeholder="information title" />
   </div>
 </template>
 

@@ -32,6 +32,10 @@ const newComponentNames: Array<TNewComponentName> = [
     value: 'table',
     label: 'table',
   },
+  {
+    value: 'shop-list',
+    label: 'shop-list',
+  },
 ];
 
 export default newComponentNames;

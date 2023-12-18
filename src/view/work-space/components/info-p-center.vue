@@ -1,15 +1,11 @@
 <template>
   <div class="flex flex-col space-y-4">
-    <div
-      v-for="(i, index) in text.length"
-      :key="i"
-      class="w-[400px] flex justify-between items-center"
-    >
+    <div v-for="(i, index) in text.length" :key="i" class="flex justify-between items-center">
       <el-input
         v-if="text[i - 1] !== null"
         type="textarea"
         id="textarea-center"
-        class="w-[300px]"
+        class="w-[80%]"
         v-model="text[index]"
       />
 
@@ -22,7 +18,7 @@
       </el-button>
     </div>
 
-    <div>
+    <div class="flex justify-center items-center">
       <el-button @click="addNewLine" type="primary" plain>start a new line</el-button>
       <el-button @click="addEmptyLine" type="warning" plain>add an empty line</el-button>
     </div>
