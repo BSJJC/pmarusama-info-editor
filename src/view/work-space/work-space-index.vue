@@ -22,7 +22,7 @@
               :label="`component ${i.value} :`"
               class="py-4 relative"
             >
-              <div class="absolute top-[-15px] left-[410px]">
+              <div class="absolute top-[-20px] right-[-20px]">
                 <el-icon
                   color="#F56C6C"
                   class="hover:cursor-pointer"

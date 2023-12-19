@@ -56,6 +56,7 @@
       v-model="setTextVisible"
       :title="`row: ${editingRowIndex + 1} col: ${editingColIndex + 1}`"
       draggable
+      align-center
       class="rounded-lg"
       @close="checkOnClose"
     >
