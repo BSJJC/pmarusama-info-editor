@@ -9,7 +9,13 @@
       </el-button>
     </div>
 
-    <el-dialog v-model="setShopImageVisible" title="Tips" draggable align-center class="rounded-lg">
+    <el-dialog
+      v-model="setShopImageVisible"
+      title="upload new shop image"
+      draggable
+      align-center
+      class="rounded-lg"
+    >
       <div v-if="openType === 'new'" class="space-y-8">
         <el-form label-width="100px" class="space-y-2">
           <el-form-item label="shop image :">
@@ -20,6 +26,7 @@
               list-type="picture"
               :on-change="handleFileSelected"
               :on-exceed="handleExceed"
+              action="http://localhost:5000/api/informationShopImage/create"
             >
               <template #trigger>
                 <el-button type="primary" plain>select shop image file</el-button>
@@ -30,14 +37,17 @@
           <el-form-item label="shop name :">
             <el-input v-model="newShopName" />
           </el-form-item>
-
-          <el-form-item label="shop url :">
-            <el-input v-model="newShopUrl" />
-          </el-form-item>
         </el-form>
 
         <div class="w-full flex justify-end">
-          <el-button type="primary" plain>submit</el-button>
+          <el-button
+            type="primary"
+            plain
+            :disabled="!newShopImageCheck()"
+            @click="uploadNewShopImage"
+          >
+            submit
+          </el-button>
         </div>
       </div>
 
@@ -48,15 +58,15 @@
 
 <script setup lang="ts">
 import { ref, Ref, watch } from 'vue';
-import { genFileId } from 'element-plus';
-import { UploadInstance, UploadRawFile } from 'element-plus';
+import { UploadInstance, UploadRawFile, UploadFile } from 'element-plus';
+import axios from 'axios';
 
 const setShopImageVisible: Ref<boolean> = ref(false);
 const openType: Ref<'exist' | 'new'> = ref('exist' || 'new');
 
 const uploadRef = ref<UploadInstance>();
+const newShopFile: Ref<File | undefined> = ref();
 const newShopName: Ref<string> = ref('');
-const newShopUrl: Ref<string> = ref('');
 
 function addExitShopImage(): void {
   setShopImageVisible.value = true;
@@ -71,12 +81,34 @@ function addNewShopImage(): void {
 function handleExceed(files: Array<File>): void {
   uploadRef.value!.clearFiles();
   const file = files[0] as UploadRawFile;
-  file.uid = genFileId();
+  newShopFile.value = file;
   uploadRef.value!.handleStart(file);
 }
 
-function handleFileSelected(file: File): void {
+function handleFileSelected(file: UploadFile): void {
+  newShopFile.value = file.raw;
   newShopName.value = file.name.substring(0, file.name.lastIndexOf('.'));
+}
+
+function newShopImageCheck(): boolean {
+  if (!newShopFile.value || !newShopName.value) return false;
+  return true;
+}
+
+function uploadNewShopImage(): void {
+  const formData = new FormData();
+
+  formData.append('informationShopImage', newShopFile.value!);
+  formData.append('shopName', newShopName.value);
+
+  axios
+    .post('http://localhost:5000/api/informationShopImage/create', formData)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 }
 
 watch(
