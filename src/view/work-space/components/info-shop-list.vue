@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="flex w-full justify-between">
-      <el-button type="primary" plain class="w-[45%]" @click="addExitShopImage">
-        add exit shop
+      <el-button type="primary" plain class="w-[45%]" @click="addExistShopImage">
+        add exist shop
       </el-button>
       <el-button type="success" plain class="w-[45%]" @click="addNewShopImage">
         add new shop
@@ -16,6 +16,9 @@
       align-center
       class="rounded-lg"
     >
+      <!-- 
+      upload new shop image
+     -->
       <div v-if="openType === 'new'" class="space-y-8">
         <el-form label-width="100px" class="space-y-2">
           <el-form-item label="shop image :">
@@ -51,6 +54,9 @@
         </div>
       </div>
 
+      <!-- 
+        select exist shop image
+       -->
       <div v-else>b</div>
     </el-dialog>
   </div>
@@ -59,6 +65,7 @@
 <script setup lang="ts">
 import { ref, Ref, watch } from 'vue';
 import { UploadInstance, UploadRawFile, UploadFile } from 'element-plus';
+import { ElNotification } from 'element-plus';
 import axios from 'axios';
 
 const setShopImageVisible: Ref<boolean> = ref(false);
@@ -68,7 +75,7 @@ const uploadRef = ref<UploadInstance>();
 const newShopFile: Ref<File | undefined> = ref();
 const newShopName: Ref<string> = ref('');
 
-function addExitShopImage(): void {
+function addExistShopImage(): void {
   setShopImageVisible.value = true;
   openType.value = 'exist';
 }
@@ -103,11 +110,24 @@ function uploadNewShopImage(): void {
 
   axios
     .post('http://localhost:5000/api/informationShopImage/create', formData)
-    .then((res) => {
-      console.log(res);
+    .then(() => {
+      ElNotification({
+        title: 'Success',
+        message: `${newShopName.value} image have been uploaded`,
+        type: 'success',
+      });
+
+      setShopImageVisible.value = false;
+      uploadRef.value?.clearFiles();
+      newShopFile.value = undefined;
+      newShopName.value = '';
     })
-    .catch((err) => {
-      console.error(err);
+    .catch(() => {
+      ElNotification({
+        title: 'upload failed',
+        message: `${newShopName.value} image upload failed`,
+        type: 'error',
+      });
     });
 }
 
