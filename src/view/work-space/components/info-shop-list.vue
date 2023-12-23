@@ -1,12 +1,30 @@
 <template>
-  <div>
+  <div class="space-y-4">
     <div class="flex w-full justify-between">
-      <el-button type="primary" plain class="w-[45%]" @click="addExistShopImage">
-        add exist shop
-      </el-button>
+      <el-input v-model="searchingShopName" class="w-[45%]" placeholder="search shop name" />
+
       <el-button type="success" plain class="w-[45%]" @click="addNewShopImage">
         add new shop
       </el-button>
+    </div>
+
+    <div class="flex flex-wrap">
+      <TransitionGroup name="fade">
+        <div
+          v-for="(i, index) in shoingShopImages"
+          :key="index"
+          class="w-1/5 flex flex-col justify-center items-center m-4 p-2 rounded-lg relative transition-all duration-300 ease-in-out hover:bg-[#409eff] hover:text-white"
+        >
+          <div class="flex justify-center items-center flex-col hover:cursor-pointer">
+            <img
+              :src="`http://localhost:5000/api/informationShopImage/${i.shopName}`"
+              :alt="`shop ${i.shopName}`"
+              class="rounded-lg"
+            />
+            <span class="text-md">{{ i.shopName }}</span>
+          </div>
+        </div>
+      </TransitionGroup>
     </div>
 
     <el-dialog
@@ -16,10 +34,7 @@
       align-center
       class="rounded-lg"
     >
-      <!-- 
-      upload new shop image
-     -->
-      <div v-if="openType === 'new'" class="space-y-8">
+      <div class="space-y-8">
         <el-form label-width="100px" class="space-y-2">
           <el-form-item label="shop image :">
             <el-upload
@@ -53,36 +68,41 @@
           </el-button>
         </div>
       </div>
-
-      <!-- 
-        select exist shop image
-       -->
-      <div v-else>b</div>
     </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, watch } from 'vue';
+import { ref, Ref, computed, ComputedRef, watch, onBeforeMount } from 'vue';
 import { UploadInstance, UploadRawFile, UploadFile } from 'element-plus';
 import { ElNotification } from 'element-plus';
 import axios from 'axios';
 
 const setShopImageVisible: Ref<boolean> = ref(false);
-const openType: Ref<'exist' | 'new'> = ref('exist' || 'new');
 
 const uploadRef = ref<UploadInstance>();
 const newShopFile: Ref<File | undefined> = ref();
 const newShopName: Ref<string> = ref('');
 
-function addExistShopImage(): void {
-  setShopImageVisible.value = true;
-  openType.value = 'exist';
-}
+const searchingShopName: Ref<string> = ref('');
+
+const allShopImages: Ref<
+  Array<{
+    shopName: string;
+  }>
+> = ref([]);
+const shoingShopImages: ComputedRef<
+  {
+    shopName: string;
+  }[]
+> = computed(() => {
+  if (!searchingShopName.value) return allShopImages.value;
+
+  return allShopImages.value.filter((item) => item.shopName.includes(searchingShopName.value));
+});
 
 function addNewShopImage(): void {
   setShopImageVisible.value = true;
-  openType.value = 'new';
 }
 
 function handleExceed(files: Array<File>): void {
@@ -131,6 +151,12 @@ function uploadNewShopImage(): void {
     });
 }
 
+onBeforeMount(() => {
+  axios.get('http://localhost:5000/api/informationShopImage/all').then((res) => {
+    allShopImages.value = res.data;
+  });
+});
+
 watch(
   () => uploadRef.value,
   () => {
@@ -139,4 +165,27 @@ watch(
 );
 </script>
 
-<style></style>
+<style scoped>
+.p ::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  content: '';
+  border-radius: 0.5rem;
+  background-color: #409eff;
+  opacity: 0.1;
+}
+
+.fade-move,
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
