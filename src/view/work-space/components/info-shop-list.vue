@@ -13,8 +13,12 @@
         <div
           v-for="(i, index) in showingShopImages"
           :key="index"
-          class="w-1/5 flex flex-col justify-center items-center m-4 p-2 rounded-lg relative transition-all duration-300 ease-in-out hover:bg-[#409eff] hover:text-white"
-          @click="setShopUrl(i)"
+          class="w-1/5 flex flex-col justify-center items-center m-4 p-2 rounded-lg relative transition-all duration-300 ease-in-out hover:bg-[#409eff] hover:text-white hover:translate-y-[-5px]"
+          :style="{
+            backgroundColor: `${i.url ? '#409eff' : ''}`,
+            color: `${i.url ? 'white' : ''}`,
+          }"
+          @click="setShopUrl(i, index)"
         >
           <div class="flex justify-center items-center flex-col hover:cursor-pointer">
             <img
@@ -78,16 +82,37 @@
       align-center
       class="rounded-lg"
     >
-      <div class="flex justify-center items-center flex-col space-y-4">
-        <img
-          :src="`http://localhost:5000/api/informationShopImage/${editingShopName}`"
-          :alt="`shop ${editingShopName}`"
-          class="rounded-lg"
-        />
+      <div class="space-y-8">
+        <div class="flex justify-center items-center flex-col space-y-4">
+          <img
+            :src="`http://localhost:5000/api/informationShopImage/${editingShopName}`"
+            :alt="`shop ${editingShopName}`"
+            class="rounded-lg"
+          />
 
-        <div class="w-2/3 flex space-x-4">
-          <span>url:</span>
-          <el-input class="" />
+          <div class="w-2/3 flex space-x-4">
+            <span>url:</span>
+            <el-input v-model="showingShopImages[editingShopIndex].url" />
+          </div>
+        </div>
+
+        <div class="flex justify-end">
+          <el-button
+            type="danger"
+            plain
+            :disabled="!showingShopImages[editingShopIndex].url"
+            @click="cancelSetUrl"
+          >
+            cancel
+          </el-button>
+          <el-button
+            type="primary"
+            plain
+            :disabled="!showingShopImages[editingShopIndex].url"
+            @click="setShopUrlVisible = false"
+          >
+            submit
+          </el-button>
         </div>
       </div>
     </el-dialog>
@@ -99,6 +124,13 @@ import { ref, Ref, computed, ComputedRef, watch, onBeforeMount } from 'vue';
 import { UploadInstance, UploadRawFile, UploadFile } from 'element-plus';
 import { ElNotification } from 'element-plus';
 import axios from 'axios';
+import { useForm } from '@/store/useForm';
+
+const props = defineProps({
+  componentId: Number,
+});
+
+const { form } = useForm();
 
 const addNewShopImageVisible: Ref<boolean> = ref(false);
 const uploadRef = ref<UploadInstance>();
@@ -124,6 +156,7 @@ const showingShopImages: ComputedRef<
 });
 const setShopUrlVisible: Ref<boolean> = ref(false);
 const editingShopName: Ref<string> = ref('');
+const editingShopIndex: Ref<number> = ref(0);
 
 function addNewShopImage(): void {
   addNewShopImageVisible.value = true;
@@ -175,9 +208,15 @@ function uploadNewShopImage(): void {
     });
 }
 
-function setShopUrl(item: { shopName: string }): void {
+function setShopUrl(item: { shopName: string }, index: number): void {
   editingShopName.value = item.shopName;
+  editingShopIndex.value = index;
   setShopUrlVisible.value = true;
+}
+
+function cancelSetUrl(): void {
+  showingShopImages.value[editingShopIndex.value].url = '';
+  setShopUrlVisible.value = false;
 }
 
 onBeforeMount(() => {
@@ -187,9 +226,15 @@ onBeforeMount(() => {
 });
 
 watch(
-  () => uploadRef.value,
+  () => showingShopImages.value,
   () => {
-    console.log(uploadRef.value);
+    form.data.components[props.componentId!].data = showingShopImages.value.filter(
+      (shop) => shop.url,
+    );
+  },
+  {
+    immediate: true,
+    deep: true,
   },
 );
 </script>
