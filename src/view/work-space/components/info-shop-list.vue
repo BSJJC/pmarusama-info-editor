@@ -194,6 +194,10 @@ function uploadNewShopImage(): void {
         type: 'success',
       });
 
+      axios.get('http://localhost:5000/api/informationShopImage/all').then((res) => {
+        allShopImages.value = res.data;
+      });
+
       addNewShopImageVisible.value = false;
       uploadRef.value?.clearFiles();
       newShopFile.value = undefined;
