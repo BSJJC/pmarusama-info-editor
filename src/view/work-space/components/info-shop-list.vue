@@ -11,9 +11,10 @@
     <div class="flex flex-wrap">
       <TransitionGroup name="fade">
         <div
-          v-for="(i, index) in shoingShopImages"
+          v-for="(i, index) in showingShopImages"
           :key="index"
           class="w-1/5 flex flex-col justify-center items-center m-4 p-2 rounded-lg relative transition-all duration-300 ease-in-out hover:bg-[#409eff] hover:text-white"
+          @click="setShopUrl(i)"
         >
           <div class="flex justify-center items-center flex-col hover:cursor-pointer">
             <img
@@ -28,7 +29,7 @@
     </div>
 
     <el-dialog
-      v-model="setShopImageVisible"
+      v-model="addNewShopImageVisible"
       title="upload new shop image"
       draggable
       align-center
@@ -69,6 +70,27 @@
         </div>
       </div>
     </el-dialog>
+
+    <el-dialog
+      v-model="setShopUrlVisible"
+      :title="`set the url of shop ${editingShopName}`"
+      draggable
+      align-center
+      class="rounded-lg"
+    >
+      <div class="flex justify-center items-center flex-col space-y-4">
+        <img
+          :src="`http://localhost:5000/api/informationShopImage/${editingShopName}`"
+          :alt="`shop ${editingShopName}`"
+          class="rounded-lg"
+        />
+
+        <div class="w-2/3 flex space-x-4">
+          <span>url:</span>
+          <el-input class="" />
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -78,31 +100,33 @@ import { UploadInstance, UploadRawFile, UploadFile } from 'element-plus';
 import { ElNotification } from 'element-plus';
 import axios from 'axios';
 
-const setShopImageVisible: Ref<boolean> = ref(false);
-
+const addNewShopImageVisible: Ref<boolean> = ref(false);
 const uploadRef = ref<UploadInstance>();
 const newShopFile: Ref<File | undefined> = ref();
 const newShopName: Ref<string> = ref('');
 
 const searchingShopName: Ref<string> = ref('');
-
 const allShopImages: Ref<
   Array<{
     shopName: string;
+    url: string;
   }>
 > = ref([]);
-const shoingShopImages: ComputedRef<
+const showingShopImages: ComputedRef<
   {
     shopName: string;
+    url: string;
   }[]
 > = computed(() => {
   if (!searchingShopName.value) return allShopImages.value;
 
   return allShopImages.value.filter((item) => item.shopName.includes(searchingShopName.value));
 });
+const setShopUrlVisible: Ref<boolean> = ref(false);
+const editingShopName: Ref<string> = ref('');
 
 function addNewShopImage(): void {
-  setShopImageVisible.value = true;
+  addNewShopImageVisible.value = true;
 }
 
 function handleExceed(files: Array<File>): void {
@@ -137,7 +161,7 @@ function uploadNewShopImage(): void {
         type: 'success',
       });
 
-      setShopImageVisible.value = false;
+      addNewShopImageVisible.value = false;
       uploadRef.value?.clearFiles();
       newShopFile.value = undefined;
       newShopName.value = '';
@@ -149,6 +173,11 @@ function uploadNewShopImage(): void {
         type: 'error',
       });
     });
+}
+
+function setShopUrl(item: { shopName: string }): void {
+  editingShopName.value = item.shopName;
+  setShopUrlVisible.value = true;
 }
 
 onBeforeMount(() => {
