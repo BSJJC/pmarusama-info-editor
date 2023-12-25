@@ -1,9 +1,14 @@
 <template>
   <div class="space-y-4">
     <div class="flex w-full justify-between">
-      <el-input v-model="searchingShopName" class="w-[45%]" placeholder="search shop name" />
+      <el-input
+        v-model="searchingShopName"
+        class="w-[45%]"
+        placeholder="search shop name"
+        clearable
+      />
 
-      <el-button type="success" plain class="w-[45%]" @click="addNewShopImage">
+      <el-button type="success" plain class="w-[45%]" @click="addNewShopImageVisible = true">
         add new shop
       </el-button>
     </div>
@@ -32,6 +37,9 @@
       </TransitionGroup>
     </div>
 
+    <!-- 
+      dialog for add new shop image
+     -->
     <el-dialog
       v-model="addNewShopImageVisible"
       title="upload new shop image"
@@ -75,6 +83,9 @@
       </div>
     </el-dialog>
 
+    <!-- 
+      dialog for set shop image url
+     -->
     <el-dialog
       v-model="setShopUrlVisible"
       :title="`set the url of shop ${editingShopName}`"
@@ -96,24 +107,54 @@
           </div>
         </div>
 
-        <div class="flex justify-end">
-          <el-button
-            type="danger"
-            plain
-            :disabled="!showingShopImages[editingShopIndex].url"
-            @click="cancelSetUrl"
-          >
-            cancel
-          </el-button>
-          <el-button
-            type="primary"
-            plain
-            :disabled="!showingShopImages[editingShopIndex].url"
-            @click="setShopUrlVisible = false"
-          >
-            submit
-          </el-button>
+        <div class="flex justify-between">
+          <el-button type="danger" plain @click="setDeleteShopVisible = true">delete</el-button>
+
+          <div>
+            <el-button
+              type="danger"
+              plain
+              :disabled="!showingShopImages[editingShopIndex].url"
+              @click="cancelSetUrl"
+            >
+              cancel
+            </el-button>
+
+            <el-button
+              type="primary"
+              plain
+              :disabled="!showingShopImages[editingShopIndex].url"
+              @click="setShopUrlVisible = false"
+            >
+              submit
+            </el-button>
+          </div>
         </div>
+      </div>
+    </el-dialog>
+
+    <!-- 
+      dialog for delete shop iamge
+     -->
+    <el-dialog
+      v-model="setDeleteShopVisible"
+      draggable
+      align-center
+      class="rounded-lg"
+      :title="`delete ${editingShopName} ?`"
+    >
+      <div class="flex justify-center items-center text-2xl text-[#F56C6C] font-bold">
+        <img
+          :src="`http://localhost:5000/api/informationShopImage/${editingShopName}`"
+          :alt="`shop ${editingShopName}`"
+          class="rounded-lg"
+        />
+      </div>
+
+      <div class="flex justify-end mt-4">
+        <el-button type="danger" plain @click="setDeleteShopVisible = false">cancel</el-button>
+
+        <el-button type="primary" plain @click="deleteShopImage">confirm</el-button>
       </div>
     </el-dialog>
   </div>
@@ -132,11 +173,14 @@ const props = defineProps({
 
 const { form } = useForm();
 
+//#region add new shop iamge vars
 const addNewShopImageVisible: Ref<boolean> = ref(false);
 const uploadRef = ref<UploadInstance>();
 const newShopFile: Ref<File | undefined> = ref();
 const newShopName: Ref<string> = ref('');
+//#endregion
 
+//#region edit exits shop iamge vars
 const searchingShopName: Ref<string> = ref('');
 const allShopImages: Ref<
   Array<{
@@ -152,14 +196,24 @@ const showingShopImages: ComputedRef<
 > = computed(() => {
   if (!searchingShopName.value) return allShopImages.value;
 
-  return allShopImages.value.filter((item) => item.shopName.includes(searchingShopName.value));
+  return (
+    allShopImages.value.filter((item) => item.shopName.includes(searchingShopName.value)) || []
+  );
 });
 const setShopUrlVisible: Ref<boolean> = ref(false);
 const editingShopName: Ref<string> = ref('');
 const editingShopIndex: Ref<number> = ref(0);
+//#endregion
 
-function addNewShopImage(): void {
-  addNewShopImageVisible.value = true;
+//#region delete shop iamge vars
+const setDeleteShopVisible = ref(false);
+//#endregion
+
+//#region functions for upload new shop image
+async function getAllShopImagess(): Promise<void> {
+  axios.get('http://localhost:5000/api/informationShopImage/all').then((res) => {
+    allShopImages.value = res.data;
+  });
 }
 
 function handleExceed(files: Array<File>): void {
@@ -194,9 +248,7 @@ function uploadNewShopImage(): void {
         type: 'success',
       });
 
-      axios.get('http://localhost:5000/api/informationShopImage/all').then((res) => {
-        allShopImages.value = res.data;
-      });
+      getAllShopImagess();
 
       addNewShopImageVisible.value = false;
       uploadRef.value?.clearFiles();
@@ -211,7 +263,9 @@ function uploadNewShopImage(): void {
       });
     });
 }
+//#endregion
 
+//#region functions for edit exits shop image
 function setShopUrl(item: { shopName: string }, index: number): void {
   editingShopName.value = item.shopName;
   editingShopIndex.value = index;
@@ -222,11 +276,42 @@ function cancelSetUrl(): void {
   showingShopImages.value[editingShopIndex.value].url = '';
   setShopUrlVisible.value = false;
 }
+//#endregion
+
+//#region function for delete shop image
+function deleteShopImage(): void {
+  axios
+    .delete(`http://localhost:5000/api/informationShopImage/delete/${editingShopName.value}`)
+    .then((res) => {
+      console.log(res);
+
+      ElNotification({
+        title: 'Success',
+        message: `shop ${editingShopName.value} have been deleted`,
+        type: 'success',
+      });
+
+      setDeleteShopVisible.value = false;
+      setShopUrlVisible.value = false;
+      editingShopName.value = '';
+      editingShopIndex.value = 0;
+
+      getAllShopImagess();
+    })
+    .catch((err) => {
+      console.error(err);
+
+      ElNotification({
+        title: 'Error',
+        message: `error when delete shop ${editingShopName.value}`,
+        type: 'error',
+      });
+    });
+}
+//#endregion
 
 onBeforeMount(() => {
-  axios.get('http://localhost:5000/api/informationShopImage/all').then((res) => {
-    allShopImages.value = res.data;
-  });
+  getAllShopImagess();
 });
 
 watch(
@@ -244,18 +329,6 @@ watch(
 </script>
 
 <style scoped>
-.p ::before {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  content: '';
-  border-radius: 0.5rem;
-  background-color: #409eff;
-  opacity: 0.1;
-}
-
 .fade-move,
 .fade-enter-active,
 .fade-leave-active {
