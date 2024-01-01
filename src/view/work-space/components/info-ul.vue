@@ -1,16 +1,26 @@
 <template>
-  <div class="custom-tree-container">
-    <el-tree :data="dataSource" node-key="id" default-expand-all :expand-on-click-node="false">
+  <div>
+    <el-tree
+      v-for="(data, index) in dataSources"
+      :key="index"
+      :data="data"
+      node-key="id"
+      default-expand-all
+      :expand-on-click-node="false"
+      class="rounded-lg opacity-50"
+    >
       <template #default="{ node, data }">
-        <span class="custom-tree-node">
+        <span class="flex flex-1 justify-between items-center pr-[8px] text-[14px]">
           <span>{{ node.label }}</span>
           <span>
-            <a @click="append(data)">Append</a>
-            <a style="margin-left: 8px" @click="remove(node, data)">Delete</a>
+            <a @click="append(data, index)">Append</a>
+            <a style="margin-left: 8px" @click="remove(node, data, index)">Delete</a>
           </span>
         </span>
       </template>
     </el-tree>
+
+    <el-button @click="t">123</el-button>
   </div>
 </template>
 
@@ -18,89 +28,39 @@
 import { ref } from 'vue';
 import type Node from 'element-plus/es/components/tree/src/model/node';
 
-type Tree = {
+type TTree = {
   id: number;
   label: string;
-  children?: Tree[];
+  children?: TTree[];
 };
-let id = 1000;
 
-const append = (data: Tree) => {
+let id = 0;
+
+const dataSources = ref<Array<Array<TTree>>>([[]]);
+
+function append(data: TTree, index: number): void {
   const newChild = { id: id++, label: 'testtest', children: [] };
-  if (!data.children) {
-    data.children = [];
-  }
+  if (!data.children) data.children = [];
+
   data.children.push(newChild);
-  dataSource.value = [...dataSource.value];
-};
+  dataSources.value[index] = [...dataSources.value[index]];
+}
 
-const remove = (node: Node, data: Tree) => {
+function remove(node: Node, data: TTree, index: number): void {
   const parent = node.parent;
-  const children: Tree[] = parent.data.children || parent.data;
-  const index = children.findIndex((d) => d.id === data.id);
-  children.splice(index, 1);
-  dataSource.value = [...dataSource.value];
-};
+  const children: TTree[] = parent.data.children || parent.data;
+  const position = children.findIndex((d) => d.id === data.id);
+  children.splice(position, 1);
+  dataSources.value[index] = [...dataSources.value[index]];
+}
 
-const dataSource = ref<Tree[]>([
-  {
-    id: 1,
-    label: 'Level one 1',
-    children: [
-      {
-        id: 4,
-        label: 'Level two 1-1',
-        children: [
-          {
-            id: 9,
-            label: 'Level three 1-1-1',
-          },
-          {
-            id: 10,
-            label: 'Level three 1-1-2',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 2,
-    label: 'Level one 2',
-    children: [
-      {
-        id: 5,
-        label: 'Level two 2-1',
-      },
-      {
-        id: 6,
-        label: 'Level two 2-2',
-      },
-    ],
-  },
-  {
-    id: 3,
-    label: 'Level one 3',
-    children: [
-      {
-        id: 7,
-        label: 'Level two 3-1',
-      },
-      {
-        id: 8,
-        label: 'Level two 3-2',
-      },
-    ],
-  },
-]);
+const t = () => {
+  if (!dataSources.value[0]) dataSources.value[0] = [];
+  dataSources.value[0].push({
+    id,
+    label: '121',
+  });
+};
 </script>
 
-<style scoped>
-.custom-tree-node {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 14px;
-  padding-right: 8px;
-}
-</style>
+<style></style>
