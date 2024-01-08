@@ -148,4 +148,3 @@ watch(
   position: absolute;
 }
 </style>
-./newComponentNames.ts
