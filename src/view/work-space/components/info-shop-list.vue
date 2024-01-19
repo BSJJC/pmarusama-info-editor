@@ -210,12 +210,24 @@ const setDeleteShopVisible = ref(false);
 //#endregion
 
 //#region functions for upload new shop image
+/**
+ * Fetches all shop images from the server and updates the 'allShopImages' variable.
+ *
+ * @returns {Promise<void>}
+ */
 async function getAllShopImagess(): Promise<void> {
   axios.get('http://localhost:5000/api/informationShopImage/all').then((res) => {
     allShopImages.value = res.data;
   });
 }
 
+/**
+ * Handles the case where the number of selected files exceeds the limit.
+ * Clears files, sets the new shop file, and handles the start of the upload.
+ *
+ * @param files The array of selected files.
+ * @returns {void}
+ */
 function handleExceed(files: Array<File>): void {
   uploadRef.value!.clearFiles();
   const file = files[0] as UploadRawFile;
@@ -223,16 +235,32 @@ function handleExceed(files: Array<File>): void {
   uploadRef.value!.handleStart(file);
 }
 
+/**
+ * Handles the selection of a file and sets the new shop file and name accordingly.
+ *
+ * @param file The selected file.
+ * @returns {void}
+ */
 function handleFileSelected(file: UploadFile): void {
   newShopFile.value = file.raw;
   newShopName.value = file.name.substring(0, file.name.lastIndexOf('.'));
 }
 
+/**
+ * Checks whether the new shop image file and name are not empty.
+ *
+ * @returns {boolean} Returns true if both the file and name are not empty; otherwise, false.
+ */
 function newShopImageCheck(): boolean {
   if (!newShopFile.value || !newShopName.value) return false;
   return true;
 }
 
+/**
+ * Uploads a new shop image by sending a POST request to the server with the file and name.
+ *
+ * @returns {void}
+ */
 function uploadNewShopImage(): void {
   const formData = new FormData();
 
@@ -266,12 +294,24 @@ function uploadNewShopImage(): void {
 //#endregion
 
 //#region functions for edit exits shop image
+/**
+ * Sets the shop URL of the selected shop image for editing.
+ *
+ * @param item The selected shop image.
+ * @param index The index of the selected shop image.
+ * @returns {void}
+ */
 function setShopUrl(item: { shopName: string }, index: number): void {
   editingShopName.value = item.shopName;
   editingShopIndex.value = index;
   setShopUrlVisible.value = true;
 }
 
+/**
+ * Cancels the setting of the URL for the currently edited shop image.
+ *
+ * @returns {void}
+ */
 function cancelSetUrl(): void {
   showingShopImages.value[editingShopIndex.value].url = '';
   setShopUrlVisible.value = false;
@@ -279,6 +319,11 @@ function cancelSetUrl(): void {
 //#endregion
 
 //#region function for delete shop image
+/**
+ * Deletes the selected shop image by sending a DELETE request to the server.
+ *
+ * @returns {void}
+ */
 function deleteShopImage(): void {
   axios
     .delete(`http://localhost:5000/api/informationShopImage/delete/${editingShopName.value}`)
