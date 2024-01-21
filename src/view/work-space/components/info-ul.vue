@@ -3,22 +3,23 @@
     <div
       v-for="(data, index) in dataSources"
       :key="index"
-      class="flex justify-between items-center"
+      class="flex flex-col justify-between items-center space-y-2"
     >
       <div class="w-full flex justify-between items-center">
         <el-tree
           :data="data"
+          draggable
           node-key="id"
           default-expand-all
           :expand-on-click-node="false"
           class="rounded-lg w-[90%]"
         >
           <template #default="{ node, data }">
-            <span class="flex flex-1 justify-between items-center pr-[8px] py-4">
-              <span class="text-lg">{{ node.label }}</span>
+            <span class="flex flex-1 justify-between items-center pr-[8px] text-base py-2">
+              <span>{{ node.label }}</span>
               <span>
-                <a @click="append(data, index)">Append</a>
-                <a style="margin-left: 8px" @click="remove(node, data, index)">Delete</a>
+                <a @click="append(data, index)" class="text-[#409EFF]">Append</a>
+                <a @click="remove(node, data, index)" class="text-[#F56C6C] ml-[8px]">Delete</a>
               </span>
             </span>
           </template>
