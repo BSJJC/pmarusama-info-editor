@@ -5,26 +5,50 @@
       :key="index"
       class="flex justify-between items-center"
     >
-      <el-tree
-        :data="data"
-        node-key="id"
-        default-expand-all
-        :expand-on-click-node="false"
-        class="rounded-lg w-[80%]"
-      >
-        <template #default="{ node, data }">
-          <span class="flex flex-1 justify-between items-center pr-[8px] text-[14px]">
-            <span>{{ node.label }}</span>
-            <span>
-              <a @click="append(data, index)">Append</a>
-              <a style="margin-left: 8px" @click="remove(node, data, index)">Delete</a>
+      <div class="w-full flex justify-between items-center">
+        <el-tree
+          :data="data"
+          node-key="id"
+          default-expand-all
+          :expand-on-click-node="false"
+          class="rounded-lg w-[90%]"
+        >
+          <template #default="{ node, data }">
+            <span class="flex flex-1 justify-between items-center pr-[8px] py-4">
+              <span class="text-lg">{{ node.label }}</span>
+              <span>
+                <a @click="append(data, index)">Append</a>
+                <a style="margin-left: 8px" @click="remove(node, data, index)">Delete</a>
+              </span>
             </span>
-          </span>
-        </template>
-      </el-tree>
+          </template>
+        </el-tree>
 
-      <el-button type="danger" plain @click="showDeleteTree(index)">delete</el-button>
+        <el-button
+          :disabled="dataSources.length === 1"
+          type="danger"
+          plain
+          @click="showDeleteTree(index)"
+        >
+          delete
+        </el-button>
+      </div>
     </div>
+
+    <!-- add new tree dialog -->
+    <el-dialog v-model="setNewTree" :show-close="false" draggable align-center class="rounded-lg">
+      <div class="flex justify-between">
+        <span>add new tree:</span>
+        <el-input type="text" v-model="newTreeText" class="w-[80%]" />
+      </div>
+
+      <template #footer>
+        <span>
+          <el-button @click="setNewTree = false">Cancel</el-button>
+          <el-button type="primary" plain @click="addNewTree">Confirm</el-button>
+        </span>
+      </template>
+    </el-dialog>
 
     <!-- 
       delete tree dialog
@@ -59,10 +83,24 @@ type TTree = {
 
 let id = 0;
 
-const dataSources = ref<Array<Array<TTree>>>([[]]);
+const dataSources = ref<Array<Array<TTree>>>([]);
 
+const setNewTree: Ref<boolean> = ref(true);
+const newTreeText: Ref<string> = ref('');
 const setDeleteTree: Ref<boolean> = ref(false);
 const deleteTreeData = ref<Array<TTree>>([]);
+
+function addNewTree(): void {
+  dataSources.value.push([
+    {
+      id,
+      label: newTreeText.value,
+      children: [],
+    },
+  ]);
+
+  setNewTree.value = false;
+}
 
 /**
  * Append a new child node to a given tree node.
