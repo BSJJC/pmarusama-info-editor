@@ -36,20 +36,9 @@
       </div>
     </div>
 
-    <!-- add new tree dialog -->
-    <el-dialog v-model="setNewTree" :show-close="false" draggable align-center class="rounded-lg">
-      <div class="flex justify-between">
-        <span>add new tree:</span>
-        <el-input type="text" v-model="newTreeText" class="w-[80%]" />
-      </div>
-
-      <template #footer>
-        <span>
-          <el-button @click="setNewTree = false">Cancel</el-button>
-          <el-button type="primary" plain @click="addNewTree">Confirm</el-button>
-        </span>
-      </template>
-    </el-dialog>
+    <div class="mt-4 w-[90%] flex justify-end">
+      <el-button type="primary" plain>add new tree</el-button>
+    </div>
 
     <!-- 
       delete tree dialog
@@ -73,8 +62,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref } from 'vue';
+import { ref, Ref, onMounted } from 'vue';
 import type Node from 'element-plus/es/components/tree/src/model/node';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 type TTree = {
   id: number;
@@ -86,21 +76,30 @@ let id = 0;
 
 const dataSources = ref<Array<Array<TTree>>>([]);
 
-const setNewTree: Ref<boolean> = ref(true);
-const newTreeText: Ref<string> = ref('');
 const setDeleteTree: Ref<boolean> = ref(false);
 const deleteTreeData = ref<Array<TTree>>([]);
 
 function addNewTree(): void {
-  dataSources.value.push([
-    {
-      id,
-      label: newTreeText.value,
-      children: [],
-    },
-  ]);
-
-  setNewTree.value = false;
+  ElMessageBox.prompt('Add new tree', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    draggable: true,
+  })
+    .then(({ value }) => {
+      dataSources.value.push([
+        {
+          id,
+          label: value,
+          children: [],
+        },
+      ]);
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: 'Input canceled',
+      });
+    });
 }
 
 /**
@@ -144,6 +143,10 @@ function showDeleteTree(index: number): void {
   deleteTreeData.value = dataSources.value[index];
   setDeleteTree.value = true;
 }
+
+onMounted(() => {
+  addNewTree();
+});
 </script>
 
 <style></style>
