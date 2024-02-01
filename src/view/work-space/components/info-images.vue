@@ -49,14 +49,14 @@ const props = defineProps({
   componentId: Number,
 });
 
+const { form } = useForm();
+
 const images: Ref<Array<TImages>> = ref([
   {
     url: '',
     alt: '',
   },
 ]);
-
-const { form } = useForm();
 
 function addNewImage(): void {
   images.value.push({

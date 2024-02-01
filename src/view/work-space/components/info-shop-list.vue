@@ -216,6 +216,7 @@ const setDeleteShopVisible = ref(false);
  * @returns {Promise<void>}
  */
 async function getAllShopImagess(): Promise<void> {
+  //TODO API
   axios.get('http://localhost:5000/api/informationShopImage/all').then((res) => {
     allShopImages.value = res.data;
   });

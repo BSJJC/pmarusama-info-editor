@@ -109,11 +109,11 @@
 import { ref, Ref, watch } from 'vue';
 import { useForm } from '@/store/useForm';
 
+type TText = Array<Array<Array<string | null>>>;
+
 const props = defineProps({
   componentId: Number,
 });
-
-type TText = Array<Array<Array<string | null>>>;
 
 const { form } = useForm();
 

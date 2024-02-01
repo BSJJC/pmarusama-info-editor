@@ -27,9 +27,9 @@ const props = defineProps({
   componentId: Number,
 });
 
-const text: Ref<Array<string | null>> = ref(['']);
-
 const { form } = useForm();
+
+const text: Ref<Array<string | null>> = ref(['']);
 
 function addNewLine(): void {
   text.value.push('');

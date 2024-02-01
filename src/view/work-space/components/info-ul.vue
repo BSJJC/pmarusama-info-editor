@@ -3,19 +3,20 @@
     <div
       v-for="(data, index) in dataSources"
       :key="index"
-      class="flex flex-col justify-between items-center space-y-2"
+      class="flex flex-col justify-between items-center"
     >
-      <div class="w-full flex justify-between items-center">
+      <div class="w-full flex justify-between items-center mb-4">
         <el-tree
           :data="data"
-          draggable
+          empty-text="If no data is present upon submission, the component will be deleted."
           node-key="id"
+          draggable
           default-expand-all
           :expand-on-click-node="false"
           class="rounded-lg w-[90%]"
         >
           <template #default="{ node, data }">
-            <span class="flex flex-1 justify-between items-center pr-[8px] text-base py-2">
+            <span class="flex flex-1 justify-between items-center pr-[8px] text-base">
               <span>{{ node.label }}</span>
               <span>
                 <a @click="append(data, index)" class="text-[#409EFF]">Append</a>
@@ -29,7 +30,7 @@
           :disabled="dataSources.length === 1"
           type="danger"
           plain
-          @click="showDeleteTree(index)"
+          @click="dataSources.splice(index, 1)"
         >
           delete
         </el-button>
@@ -37,34 +38,16 @@
     </div>
 
     <div class="mt-4 w-[90%] flex justify-end">
-      <el-button type="primary" plain>add new tree</el-button>
+      <el-button type="primary" plain @click="addNewTree">add new tree</el-button>
     </div>
-
-    <!-- 
-      delete tree dialog
-     -->
-    <el-dialog
-      v-model="setDeleteTree"
-      :show-close="false"
-      draggable
-      align-center
-      class="rounded-lg"
-    >
-      <el-tree
-        :data="deleteTreeData"
-        node-key="id"
-        default-expand-all
-        :expand-on-click-node="false"
-        class="rounded-lg"
-      />
-    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 import type Node from 'element-plus/es/components/tree/src/model/node';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { useForm } from '@/store/useForm';
 
 type TTree = {
   id: number;
@@ -72,12 +55,15 @@ type TTree = {
   children?: Array<TTree>;
 };
 
+const props = defineProps({
+  componentId: Number,
+});
+
+const { form } = useForm();
+
 let id = 0;
 
-const dataSources = ref<Array<Array<TTree>>>([]);
-
-const setDeleteTree: Ref<boolean> = ref(false);
-const deleteTreeData = ref<Array<TTree>>([]);
+const dataSources = ref<Array<Array<TTree>>>([[]]);
 
 function addNewTree(): void {
   ElMessageBox.prompt('Add new tree', {
@@ -86,13 +72,24 @@ function addNewTree(): void {
     draggable: true,
   })
     .then(({ value }) => {
-      dataSources.value.push([
-        {
-          id,
-          label: value,
-          children: [],
-        },
-      ]);
+      // when data is empty, exchange it with new data.
+      if (dataSources.value.length === 1 && dataSources.value[0].length === 0) {
+        dataSources.value[0] = [
+          {
+            id,
+            label: value,
+            children: [],
+          },
+        ];
+      } else {
+        dataSources.value.push([
+          {
+            id,
+            label: value,
+            children: [],
+          },
+        ]);
+      }
     })
     .catch(() => {
       ElMessage({
@@ -133,20 +130,16 @@ function remove(node: Node, data: TTree, index: number): void {
   dataSources.value[index] = [...dataSources.value[index]];
 }
 
-/**
- * Show the delete tree dialog with the data of a specific tree.
- *
- * @param {number} index The index of the data source array.
- * @returns {void}
- */
-function showDeleteTree(index: number): void {
-  deleteTreeData.value = dataSources.value[index];
-  setDeleteTree.value = true;
-}
-
-onMounted(() => {
-  addNewTree();
-});
+watch(
+  () => dataSources.value,
+  () => {
+    form.data.components[props.componentId!].data = dataSources.value;
+  },
+  {
+    immediate: true,
+    deep: true,
+  },
+);
 </script>
 
 <style></style>
