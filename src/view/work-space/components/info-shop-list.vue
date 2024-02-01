@@ -164,8 +164,8 @@
 import { ref, Ref, computed, ComputedRef, watch, onBeforeMount } from 'vue';
 import { UploadInstance, UploadRawFile, UploadFile } from 'element-plus';
 import { ElNotification } from 'element-plus';
-import axios from 'axios';
 import { useForm } from '@/store/useForm';
+import API from '@/api';
 
 const props = defineProps({
   componentId: Number,
@@ -173,14 +173,11 @@ const props = defineProps({
 
 const { form } = useForm();
 
-//#region add new shop iamge vars
 const addNewShopImageVisible: Ref<boolean> = ref(false);
 const uploadRef = ref<UploadInstance>();
 const newShopFile: Ref<File | undefined> = ref();
 const newShopName: Ref<string> = ref('');
-//#endregion
 
-//#region edit exits shop iamge vars
 const searchingShopName: Ref<string> = ref('');
 const allShopImages: Ref<
   Array<{
@@ -203,23 +200,16 @@ const showingShopImages: ComputedRef<
 const setShopUrlVisible: Ref<boolean> = ref(false);
 const editingShopName: Ref<string> = ref('');
 const editingShopIndex: Ref<number> = ref(0);
-//#endregion
 
-//#region delete shop iamge vars
 const setDeleteShopVisible = ref(false);
-//#endregion
 
-//#region functions for upload new shop image
 /**
  * Fetches all shop images from the server and updates the 'allShopImages' variable.
  *
  * @returns {Promise<void>}
  */
-async function getAllShopImagess(): Promise<void> {
-  //TODO API
-  axios.get('http://localhost:5000/api/informationShopImage/all').then((res) => {
-    allShopImages.value = res.data;
-  });
+async function getAllShopImages(): Promise<void> {
+  allShopImages.value = await API.getAllShopImages();
 }
 
 /**
@@ -260,41 +250,38 @@ function newShopImageCheck(): boolean {
 /**
  * Uploads a new shop image by sending a POST request to the server with the file and name.
  *
- * @returns {void}
+ * @returns {Promise<void>}
  */
-function uploadNewShopImage(): void {
+async function uploadNewShopImage(): Promise<void> {
   const formData = new FormData();
 
   formData.append('informationShopImage', newShopFile.value!);
   formData.append('shopName', newShopName.value);
 
-  axios
-    .post('http://localhost:5000/api/informationShopImage/create', formData)
-    .then(() => {
-      ElNotification({
-        title: 'Success',
-        message: `${newShopName.value} image have been uploaded`,
-        type: 'success',
-      });
+  const uploadResult = await API.uploadShopImage(formData);
 
-      getAllShopImagess();
-
-      addNewShopImageVisible.value = false;
-      uploadRef.value?.clearFiles();
-      newShopFile.value = undefined;
-      newShopName.value = '';
-    })
-    .catch(() => {
-      ElNotification({
-        title: 'upload failed',
-        message: `${newShopName.value} image upload failed`,
-        type: 'error',
-      });
+  if (uploadResult) {
+    ElNotification({
+      title: 'Success',
+      message: `${newShopName.value} image have been uploaded`,
+      type: 'success',
     });
-}
-//#endregion
 
-//#region functions for edit exits shop image
+    getAllShopImages();
+
+    addNewShopImageVisible.value = false;
+    uploadRef.value?.clearFiles();
+    newShopFile.value = undefined;
+    newShopName.value = '';
+  } else {
+    ElNotification({
+      title: 'upload failed',
+      message: `${newShopName.value} image upload failed`,
+      type: 'error',
+    });
+  }
+}
+
 /**
  * Sets the shop URL of the selected shop image for editing.
  *
@@ -317,47 +304,41 @@ function cancelSetUrl(): void {
   showingShopImages.value[editingShopIndex.value].url = '';
   setShopUrlVisible.value = false;
 }
-//#endregion
 
-//#region function for delete shop image
 /**
  * Deletes the selected shop image by sending a DELETE request to the server.
  *
- * @returns {void}
+ * @returns {Promise<void>}
  */
-function deleteShopImage(): void {
-  axios
-    .delete(`http://localhost:5000/api/informationShopImage/delete/${editingShopName.value}`)
-    .then((res) => {
-      console.log(res);
+async function deleteShopImage(): Promise<void> {
+  const url = `http://localhost:5000/api/informationShopImage/delete/${editingShopName.value}`;
 
-      ElNotification({
-        title: 'Success',
-        message: `shop ${editingShopName.value} have been deleted`,
-        type: 'success',
-      });
+  const deleteResult = await API.deleteShopImage(url);
 
-      setDeleteShopVisible.value = false;
-      setShopUrlVisible.value = false;
-      editingShopName.value = '';
-      editingShopIndex.value = 0;
-
-      getAllShopImagess();
-    })
-    .catch((err) => {
-      console.error(err);
-
-      ElNotification({
-        title: 'Error',
-        message: `error when delete shop ${editingShopName.value}`,
-        type: 'error',
-      });
+  if (deleteResult) {
+    ElNotification({
+      title: 'Success',
+      message: `shop ${editingShopName.value} have been deleted`,
+      type: 'success',
     });
+
+    setDeleteShopVisible.value = false;
+    setShopUrlVisible.value = false;
+    editingShopName.value = '';
+    editingShopIndex.value = 0;
+
+    getAllShopImages();
+  } else {
+    ElNotification({
+      title: 'Error',
+      message: `error when delete shop ${editingShopName.value}`,
+      type: 'error',
+    });
+  }
 }
-//#endregion
 
 onBeforeMount(() => {
-  getAllShopImagess();
+  getAllShopImages();
 });
 
 watch(
