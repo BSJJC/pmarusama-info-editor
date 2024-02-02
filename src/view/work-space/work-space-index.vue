@@ -3,18 +3,6 @@
     <el-scrollbar height="90vh" class="w-full">
       <div class="w-full flex justify-center items-center">
         <el-form ref="formRef" :model="form" label-width="200px" class="w-2/3">
-          <el-form-item label="information type :">
-            <InfoType></InfoType>
-          </el-form-item>
-
-          <el-form-item label="information date :">
-            <InfoDate></InfoDate>
-          </el-form-item>
-
-          <el-form-item label="information title :">
-            <InfoTitle></InfoTitle>
-          </el-form-item>
-
           <TransitionGroup name="dynamic" tag="div" class="relative">
             <el-form-item
               v-for="(i, index) in dynamicComponents"
@@ -22,7 +10,7 @@
               :label="`component ${i.value} :`"
               class="py-4 relative"
             >
-              <div class="absolute top-[-20px] right-[-20px]">
+              <div v-if="i.deletable" class="absolute top-[-20px] right-[-20px]">
                 <el-icon
                   color="#F56C6C"
                   class="hover:cursor-pointer"
@@ -67,15 +55,16 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import newComponentNames from './newComponentNames.ts';
 
 import DynamicComponent from './dynamic-component.vue';
-import InfoType from './components/info-type.vue';
-import InfoDate from './components/info-date.vue';
-import InfoTitle from './components/info-title.vue';
 
 const { form } = useForm();
 
 const newComponentName: Ref<string> = ref('');
 
-const dynamicComponents: Ref<Array<{ value: string }>> = ref([]);
+const dynamicComponents: Ref<Array<{ value: string; deletable?: boolean }>> = ref([
+  { value: 'type', deletable: false },
+  { value: 'date', deletable: false },
+  { value: 'title', deletable: false },
+]);
 
 function addDynamicComponent(): void {
   form.data.components.push({
