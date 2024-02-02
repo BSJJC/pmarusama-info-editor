@@ -74,6 +74,7 @@ function addDynamicComponent(): void {
 
   dynamicComponents.value.push({
     value: newComponentName.value,
+    deletable: true,
   });
 
   newComponentName.value = '';
