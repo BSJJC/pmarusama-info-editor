@@ -107,11 +107,32 @@ function addNewTree(): void {
  * @returns {void}
  */
 function append(data: TTree, index: number): void {
-  const newChild = { id: id++, label: 'testtest', children: [] };
-  if (!data.children) data.children = [];
+  ElMessageBox.prompt('Please input new tree', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+  })
+    .then(({ value }) => {
+      ElMessage({
+        type: 'success',
+        message: `Your email is:${value}`,
+      });
 
-  data.children.push(newChild);
-  dataSources.value[index] = [...dataSources.value[index]];
+      const newChild = {
+        id: id++,
+        label: value,
+        children: [],
+      };
+      if (!data.children) data.children = [];
+
+      data.children.push(newChild);
+      dataSources.value[index] = [...dataSources.value[index]];
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: 'Input canceled',
+      });
+    });
 }
 
 /**
