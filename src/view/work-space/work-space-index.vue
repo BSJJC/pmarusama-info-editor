@@ -3,6 +3,10 @@
     <el-scrollbar height="90vh" class="w-full">
       <div class="w-full flex justify-center items-center">
         <el-form ref="formRef" :model="form" label-width="200px" class="w-2/3">
+          <el-form-item label="information type:">
+            <InfoType></InfoType>
+          </el-form-item>
+
           <TransitionGroup name="dynamic" tag="div" class="relative">
             <el-form-item
               v-for="(i, index) in dynamicComponents"
@@ -55,13 +59,13 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import newComponentNames from './newComponentNames.ts';
 
 import DynamicComponent from './dynamic-component.vue';
+import InfoType from './components/info-type.vue';
 
 const { form } = useForm();
 
 const newComponentName: Ref<string> = ref('');
 
 const dynamicComponents: Ref<Array<{ value: string; deletable?: boolean }>> = ref([
-  { value: 'type', deletable: false },
   { value: 'date', deletable: false },
   { value: 'title', deletable: false },
 ]);
@@ -113,7 +117,7 @@ function deleteDynamicComponent(index: number): void {
 watch(
   () => form.data.components,
   () => {
-    console.log(form.data.components);
+    console.log(form);
   },
   {
     deep: true,

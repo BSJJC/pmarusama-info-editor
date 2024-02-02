@@ -14,6 +14,8 @@ import { useForm } from '@/store/useForm';
 import dynamicComponent from './dynamic-component.vue';
 
 const { form } = useForm();
+
+console.log(form.data.components);
 </script>
 
 <style scoped>

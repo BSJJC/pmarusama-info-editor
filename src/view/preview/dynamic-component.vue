@@ -1,9 +1,10 @@
 <template>
-  <component :is="dynamicComponent"></component>
+  <component :is="dynamicComponent" :data="props.data"></component>
 </template>
 
 <script setup lang="ts">
-import importDynamiComponent from '@/utils/importDynamicComponent.ts';
+import { Ref } from 'vue';
+import importDynamicComponent from '@/utils/importDynamicComponent.ts';
 
 type TComponent = {
   componentName: string;
@@ -12,7 +13,7 @@ type TComponent = {
 
 const props = defineProps<TComponent>();
 
-const dynamicComponent = importDynamiComponent(props.componentName);
+const dynamicComponent: Ref<HTMLElement | undefined> = importDynamicComponent(props.componentName);
 </script>
 
 <style></style>

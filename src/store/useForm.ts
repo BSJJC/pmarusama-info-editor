@@ -15,12 +15,8 @@ export const useForm = defineStore('form', {
         data: {
           components: [
             {
-              componentName: 'type',
-              data: {},
-            },
-            {
               componentName: 'date',
-              data: {},
+              data: 0,
             },
             {
               componentName: 'title',
