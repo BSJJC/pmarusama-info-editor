@@ -1,7 +1,11 @@
 <template>
   <div id="preview-body" class="w-full h-full rounded-lg">
-    <!-- <dynamicComponent v-for="(i,index) in form."></dynamicComponent> -->
-    <!-- TODO 123 -->
+    <dynamicComponent
+      v-for="(i, index) in form.data.components"
+      :key="index"
+      :component-name="i.componentName"
+      :data="i.data"
+    ></dynamicComponent>
   </div>
 </template>
 

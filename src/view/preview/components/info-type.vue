@@ -1,6 +1,4 @@
-<template>
-  <div>date</div>
-</template>
+<template>type</template>
 
 <script setup lang="ts"></script>
 

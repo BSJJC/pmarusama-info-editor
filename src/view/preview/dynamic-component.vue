@@ -7,7 +7,7 @@ import importDynamiComponent from '@/utils/importDynamicComponent.ts';
 
 type TComponent = {
   componentName: string;
-  data: object;
+  data: unknown;
 };
 
 const props = defineProps<TComponent>();
