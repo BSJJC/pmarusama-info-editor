@@ -11,7 +11,13 @@
     <span class="font-bold text-lg text-white">show preview</span>
   </div>
 
-  <el-drawer v-model="showPreview" direction="btt" :size="drawerHeight" class="rounded-lg">
+  <el-drawer
+    v-if="showPreview"
+    v-model="showPreview"
+    direction="btt"
+    :size="drawerHeight"
+    class="rounded-lg"
+  >
     <!-- TODO max preview -->
     <!-- <el-button @click="drawerHeight = '100%'">max</el-button> -->
 

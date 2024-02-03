@@ -1,5 +1,5 @@
 <template>
-  <div id="preview-body" class="w-full h-full rounded-lg">
+  <div id="preview-body" class="w-full h-full rounded-lg pl-4 pt-2">
     <dynamicComponent
       v-for="(i, index) in form.data.components"
       :key="index"
@@ -14,8 +14,6 @@ import { useForm } from '@/store/useForm';
 import dynamicComponent from './dynamic-component.vue';
 
 const { form } = useForm();
-
-console.log(form.data.components);
 </script>
 
 <style scoped>
