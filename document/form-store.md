@@ -125,7 +125,6 @@ The `form` store is responsible for managing form-related data in this applicati
 
         ```typescript
         type TUl = {
-          id: number;
           label: string;
           children?: Array<TUl>
         }
