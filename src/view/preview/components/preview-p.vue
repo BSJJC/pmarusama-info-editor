@@ -1,8 +1,6 @@
 <template>
   <div>
-    <p v-for="(i, index) in texts" :key="index">
-      {{ i ? i : ` ` }}
-    </p>
+    <p v-for="(i, index) in texts" :key="index" v-html="i || '<br/>'"></p>
   </div>
 </template>
 
@@ -22,6 +20,5 @@ const texts = props.data?.texts;
 p {
   line-height: 1.8;
   color: #787878;
-  margin-bottom: 20px;
 }
 </style>
