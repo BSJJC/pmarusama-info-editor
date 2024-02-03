@@ -72,7 +72,9 @@ function deleteIamge(index: number): void {
 watch(
   () => images.value,
   () => {
-    form.data.components[props.componentId!].data = images.value;
+    form.data.components[props.componentId!].data = {
+      images: images.value,
+    };
   },
   {
     immediate: true,
