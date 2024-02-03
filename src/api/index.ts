@@ -23,7 +23,7 @@ async function makeRequest(config: TRequestConfig): Promise<any> {
 }
 
 const API = {
-  getAllShopImages: async function () {
+  getAllShops: async function () {
     const config: TRequestConfig = {
       url: 'http://localhost:5000/api/informationShopImage/all',
       method: 'GET',

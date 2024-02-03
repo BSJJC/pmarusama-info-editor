@@ -16,7 +16,8 @@
     <div class="flex flex-wrap">
       <TransitionGroup name="fade">
         <div
-          v-for="(i, index) in showingShopImages"
+          v-for="(i, index) in allShops"
+          v-show="i.shopName.includes(searchingShopName)"
           :key="index"
           class="w-1/5 flex flex-col justify-center items-center m-4 p-2 rounded-lg relative transition-all duration-300 ease-in-out hover:bg-[#409eff] hover:text-white hover:translate-y-[-5px]"
           :style="{
@@ -38,7 +39,7 @@
     </div>
 
     <!-- 
-      dialog for add new shop image
+      dialog for add new shop
      -->
     <el-dialog
       v-model="addNewShopImageVisible"
@@ -84,7 +85,7 @@
     </el-dialog>
 
     <!-- 
-      dialog for set shop image url
+      dialog for set shop url
      -->
     <el-dialog
       v-model="setShopUrlVisible"
@@ -103,7 +104,12 @@
 
           <div class="w-2/3 flex space-x-4">
             <span>url:</span>
-            <el-input v-model="showingShopImages[editingShopIndex].url" />
+            <el-input v-model="allShops[editingShopIndex].url" />
+          </div>
+
+          <div class="w-2/3 flex space-x-4">
+            <span>alt:</span>
+            <el-input v-model="allShops[editingShopIndex].alt" />
           </div>
         </div>
 
@@ -114,7 +120,7 @@
             <el-button
               type="danger"
               plain
-              :disabled="!showingShopImages[editingShopIndex].url"
+              :disabled="!allShops[editingShopIndex].url"
               @click="cancelSetUrl"
             >
               cancel
@@ -123,7 +129,7 @@
             <el-button
               type="primary"
               plain
-              :disabled="!showingShopImages[editingShopIndex].url"
+              :disabled="!allShops[editingShopIndex].url"
               @click="setShopUrlVisible = false"
             >
               submit
@@ -134,7 +140,7 @@
     </el-dialog>
 
     <!-- 
-      dialog for delete shop iamge
+      dialog for delete shop
      -->
     <el-dialog
       v-model="setDeleteShopVisible"
@@ -161,7 +167,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, computed, ComputedRef, watch, onBeforeMount } from 'vue';
+import { ref, Ref, watch, onBeforeMount } from 'vue';
 import { UploadInstance, UploadRawFile, UploadFile } from 'element-plus';
 import { ElNotification } from 'element-plus';
 import { useForm } from '@/store/useForm';
@@ -179,24 +185,14 @@ const newShopFile: Ref<File | undefined> = ref();
 const newShopName: Ref<string> = ref('');
 
 const searchingShopName: Ref<string> = ref('');
-const allShopImages: Ref<
+const allShops: Ref<
   Array<{
     shopName: string;
     url: string;
+    alt: string;
   }>
 > = ref([]);
-const showingShopImages: ComputedRef<
-  {
-    shopName: string;
-    url: string;
-  }[]
-> = computed(() => {
-  if (!searchingShopName.value) return allShopImages.value;
 
-  return (
-    allShopImages.value.filter((item) => item.shopName.includes(searchingShopName.value)) || []
-  );
-});
 const setShopUrlVisible: Ref<boolean> = ref(false);
 const editingShopName: Ref<string> = ref('');
 const editingShopIndex: Ref<number> = ref(0);
@@ -204,12 +200,12 @@ const editingShopIndex: Ref<number> = ref(0);
 const setDeleteShopVisible = ref(false);
 
 /**
- * Fetches all shop images from the server and updates the 'allShopImages' variable.
+ * Fetches all shop images from the server and updates the 'allShops' variable.
  *
  * @returns {Promise<void>}
  */
-async function getAllShopImages(): Promise<void> {
-  allShopImages.value = await API.getAllShopImages();
+async function getAllShops(): Promise<void> {
+  allShops.value = await API.getAllShops();
 }
 
 /**
@@ -267,7 +263,7 @@ async function uploadNewShopImage(): Promise<void> {
       type: 'success',
     });
 
-    getAllShopImages();
+    getAllShops();
 
     addNewShopImageVisible.value = false;
     uploadRef.value?.clearFiles();
@@ -301,7 +297,7 @@ function setShopUrl(item: { shopName: string }, index: number): void {
  * @returns {void}
  */
 function cancelSetUrl(): void {
-  showingShopImages.value[editingShopIndex.value].url = '';
+  allShops.value[editingShopIndex.value].url = '';
   setShopUrlVisible.value = false;
 }
 
@@ -327,7 +323,7 @@ async function deleteShopImage(): Promise<void> {
     editingShopName.value = '';
     editingShopIndex.value = 0;
 
-    getAllShopImages();
+    getAllShops();
   } else {
     ElNotification({
       title: 'Error',
@@ -338,15 +334,29 @@ async function deleteShopImage(): Promise<void> {
 }
 
 onBeforeMount(() => {
-  getAllShopImages();
+  getAllShops();
 });
 
 watch(
-  () => showingShopImages.value,
+  () => allShops.value,
   () => {
-    form.data.components[props.componentId!].data = showingShopImages.value.filter(
-      (shop) => shop.url,
-    );
+    type TShopList = {
+      src: string;
+      url: string;
+      alt: string;
+    };
+
+    const shopList: Array<TShopList> = allShops.value
+      .filter((shop) => shop.shopName && shop.url && shop.alt)
+      .map((shop) => ({
+        src: `http://localhost:5000/api/informationShopImage/${shop.shopName}`,
+        url: shop.url,
+        alt: shop.alt,
+      }));
+
+    form.data.components[props.componentId!].data = {
+      shopList: shopList,
+    };
   },
   {
     immediate: true,
