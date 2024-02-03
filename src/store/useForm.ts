@@ -20,7 +20,7 @@ export const useForm = defineStore('form', {
             },
             {
               componentName: 'title',
-              data: {},
+              data: '',
             },
           ] as TComponent[],
         },
