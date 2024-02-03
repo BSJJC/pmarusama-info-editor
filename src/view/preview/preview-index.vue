@@ -1,5 +1,5 @@
 <template>
-  <div id="preview-body" class="w-full h-full rounded-lg pl-4 pt-2">
+  <div id="preview-body" class="w-full h-100vh rounded-lg px-4 py-2">
     <dynamicComponent
       v-for="(i, index) in form.data.components"
       :key="index"

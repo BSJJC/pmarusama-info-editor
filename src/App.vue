@@ -19,7 +19,9 @@
     class="rounded-lg"
   >
     <!-- TODO max preview -->
-    <!-- <el-button @click="drawerHeight = '100%'">max</el-button> -->
+    <el-button @click="drawerHeight === '100%' ? (drawerHeight = '50%') : (drawerHeight = '100%')">
+      max
+    </el-button>
 
     <PreviewIndex></PreviewIndex>
   </el-drawer>
