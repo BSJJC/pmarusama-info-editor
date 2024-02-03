@@ -1,13 +1,18 @@
 <template>
   <div class="flex flex-col space-y-4">
-    <div v-for="(i, index) in text.length" :key="i" class="flex justify-between items-center">
-      <el-input v-if="text[i - 1] !== null" type="textarea" class="w-[80%]" v-model="text[index]" />
+    <div v-for="(i, index) in texts.length" :key="i" class="flex justify-between items-center">
+      <el-input
+        v-if="texts[i - 1] !== null"
+        type="textarea"
+        class="w-[80%]"
+        v-model="texts[index]"
+      />
 
       <div v-else class="mx-1 text-[#e6a23c] text-[1rem]">
         <b>an empty line here</b>
       </div>
 
-      <el-button :disabled="text.length === 1" type="danger" plain @click="deleteLine(i - 1)">
+      <el-button :disabled="texts.length === 1" type="danger" plain @click="deleteLine(i - 1)">
         delete
       </el-button>
     </div>
@@ -29,24 +34,25 @@ const props = defineProps({
 
 const { form } = useForm();
 
-const text: Ref<Array<string | null>> = ref(['']);
+const texts: Ref<Array<string | null>> = ref(['']);
 
 function addNewLine(): void {
-  text.value.push('');
+  texts.value.push('');
 }
-
 function addEmptyLine(): void {
-  text.value.push(null);
+  texts.value.push(null);
 }
 
 function deleteLine(index: number) {
-  text.value.splice(index, 1);
+  texts.value.splice(index, 1);
 }
 
 watch(
-  () => text.value,
+  () => texts.value,
   () => {
-    form.data.components[props.componentId!].data = text.value;
+    form.data.components[props.componentId!].data = {
+      texts: texts.value,
+    };
   },
   {
     immediate: true,
