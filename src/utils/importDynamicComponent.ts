@@ -11,7 +11,7 @@ export default function importDynamicComponent(
 ): Ref<HTMLElement | undefined> {
   const dynamicComponent: Ref<HTMLElement | undefined> = shallowRef();
 
-  import(`@/view/preview/components/info-${componentName}.vue`).then((component) => {
+  import(`@/view/preview/components/preview-${componentName}.vue`).then((component) => {
     dynamicComponent.value = component.default;
   });
 

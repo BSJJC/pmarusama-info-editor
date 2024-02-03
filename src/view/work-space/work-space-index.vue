@@ -67,7 +67,7 @@ const newComponentName: Ref<string> = ref('');
 
 const dynamicComponents: Ref<Array<{ value: string; deletable?: boolean }>> = ref([
   { value: 'date', deletable: false },
-  { value: 'title', deletable: false },
+  { value: 'h1', deletable: false },
 ]);
 
 function addDynamicComponent(): void {
