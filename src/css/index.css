@@ -2,3 +2,12 @@ body {
   background-color: whitesmoke;
   overflow: hidden;
 }
+
+a {
+  color: #f60;
+}
+
+::selection {
+  color: whitesmoke;
+  background: #f60;
+}

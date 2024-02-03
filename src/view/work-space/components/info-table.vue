@@ -14,14 +14,14 @@
         class="w-[50px] h-[50px] m-[5px] flex justify-center items-center text-white text-lg font-bold rounded-md transition-all duration-300 ease-in-out hover:cursor-pointer hover:shadow-lg hover:translate-y-[-5px]"
         :style="{
           backgroundColor: `${
-            text[calculateRowPosition(id)][calculateColPosition(id)].length === 0
+            table[calculateRowPosition(id)][calculateColPosition(id)].length === 0
               ? '#909399'
               : '#409EFF'
           }`,
         }"
         @click="setText(id)"
       >
-        {{ text[calculateRowPosition(id)][calculateColPosition(id)][0]?.slice(0, 1) }}
+        {{ table[calculateRowPosition(id)][calculateColPosition(id)][0]?.slice(0, 1) }}
       </div>
     </div>
 
@@ -63,15 +63,15 @@
       <template #default>
         <div class="flex flex-col space-y-4">
           <div
-            v-for="(i, index) in text[editingRowIndex][editingColIndex].length"
+            v-for="(i, index) in table[editingRowIndex][editingColIndex].length"
             :key="i"
             class="w-full flex justify-between items-center"
           >
             <el-input
-              v-if="text[editingRowIndex][editingColIndex][i - 1] !== null"
+              v-if="table[editingRowIndex][editingColIndex][i - 1] !== null"
               type="textarea"
               class="w-[80%]"
-              v-model="text[editingRowIndex][editingColIndex][index]"
+              v-model="table[editingRowIndex][editingColIndex][index]"
             />
 
             <div v-else class="mx-1 text-[#e6a23c] text-[1rem]">
@@ -79,7 +79,7 @@
             </div>
 
             <el-button
-              :disabled="text[editingRowIndex][editingColIndex].length === 1"
+              :disabled="table[editingRowIndex][editingColIndex].length === 1"
               type="danger"
               plain
               @click="deleteLine(i)"
@@ -123,7 +123,7 @@ const editingRowIndex: Ref<number> = ref(0);
 const editingColIndex: Ref<number> = ref(0);
 const editingBlockRef: Ref<HTMLElement | undefined> = ref();
 
-const text: Ref<TText> = ref(generateTextArray());
+const table: Ref<TText> = ref(generateTextArray());
 
 const setTextVisible = ref(false);
 
@@ -183,29 +183,29 @@ function setText(index: number): void {
   editingBlockRef.value.classList.add('editing');
 
   // Initialize the array, otherwise the input component will not render
-  if (text.value[editingRowIndex.value][editingColIndex.value].length === 0) {
-    text.value[editingRowIndex.value][editingColIndex.value].push('');
+  if (table.value[editingRowIndex.value][editingColIndex.value].length === 0) {
+    table.value[editingRowIndex.value][editingColIndex.value].push('');
   }
 
   setTextVisible.value = true;
 }
 
 function cancelSetText(): void {
-  text.value[editingRowIndex.value][editingColIndex.value] = [];
+  table.value[editingRowIndex.value][editingColIndex.value] = [];
 
   setTextVisible.value = false;
 }
 
 function addNewLine(): void {
-  text.value[editingRowIndex.value][editingColIndex.value].push('');
+  table.value[editingRowIndex.value][editingColIndex.value].push('');
 }
 
 function addEmptyLine(): void {
-  text.value[editingRowIndex.value][editingColIndex.value].push(null);
+  table.value[editingRowIndex.value][editingColIndex.value].push(null);
 }
 
 function deleteLine(index: number): void {
-  text.value[editingRowIndex.value][editingColIndex.value].splice(index - 1, 1);
+  table.value[editingRowIndex.value][editingColIndex.value].splice(index - 1, 1);
 }
 
 /**
@@ -224,10 +224,10 @@ function checkOnClose(): void {
    * stop traversing after traversing to a meaningful value
    * and delete count number of meaningless elements in the array starting from 0
    */
-  for (let i = 0; i < text.value[editingRowIndex.value][editingColIndex.value].length; i++) {
+  for (let i = 0; i < table.value[editingRowIndex.value][editingColIndex.value].length; i++) {
     if (
-      text.value[editingRowIndex.value][editingColIndex.value][i]?.length === 0 ||
-      text.value[editingRowIndex.value][editingColIndex.value][i] === null
+      table.value[editingRowIndex.value][editingColIndex.value][i]?.length === 0 ||
+      table.value[editingRowIndex.value][editingColIndex.value][i] === null
     ) {
       count++;
     } else {
@@ -235,13 +235,13 @@ function checkOnClose(): void {
     }
   }
 
-  text.value[editingRowIndex.value][editingColIndex.value].splice(0, count);
+  table.value[editingRowIndex.value][editingColIndex.value].splice(0, count);
 }
 
 watch(
   () => [rows.value, cols.value],
   () => {
-    text.value = generateTextArray();
+    table.value = generateTextArray();
   },
   {
     immediate: true,
@@ -250,9 +250,11 @@ watch(
 );
 
 watch(
-  () => text.value,
+  () => table.value,
   () => {
-    form.data.components[props.componentId!].data = text.value;
+    form.data.components[props.componentId!].data = {
+      table: table.value,
+    };
   },
   {
     immediate: true,

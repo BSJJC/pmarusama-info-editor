@@ -99,8 +99,9 @@ The `form` store is responsible for managing form-related data in this applicati
 
         ```typescript
         type TShopList = {
-            shopName: string;
+            src:string;
             url: string;
+            alt: string;
         };
 
         data: {
