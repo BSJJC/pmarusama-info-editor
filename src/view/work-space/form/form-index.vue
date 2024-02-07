@@ -3,6 +3,7 @@
     <el-scrollbar height="90vh" class="w-full">
       <div class="w-full flex justify-center items-center">
         <el-form ref="formRef" :model="form" label-width="200px" class="w-2/3">
+          <!-- render all components -->
           <TransitionGroup name="dynamic" tag="div" class="relative">
             <el-form-item
               v-for="(i, index) in dynamicComponents"
@@ -10,6 +11,10 @@
               :label="`component ${i.value} :`"
               class="py-4 relative"
             >
+              <!-- 
+                judge if it is deletable.
+                the date, title component cannot be deleted.
+             -->
               <div v-if="i.deletable" class="absolute top-[-20px] right-[-20px]">
                 <el-icon
                   color="#F56C6C"
@@ -24,6 +29,7 @@
             </el-form-item>
           </TransitionGroup>
 
+          <!-- add new component -->
           <el-form-item label="information title :">
             <div class="w-full flex justify-between">
               <el-select v-model="newComponentName" placeholder="new component" class="w-[90%]">
@@ -39,6 +45,7 @@
             </div>
           </el-form-item>
 
+          <!-- submit button -->
           <el-form-item class="mt-[15vh]">
             <el-button
               type="primary"

@@ -1,5 +1,6 @@
 <template>
-  <div class="w-full h-screen flex flex-row relative">
+  <RouterView></RouterView>
+  <!-- <div class="w-full h-screen flex flex-row relative">
     <WorkSpaceIndex></WorkSpaceIndex>
   </div>
 
@@ -18,13 +19,12 @@
     :size="drawerHeight"
     class="rounded-lg"
   >
-    <!-- TODO max preview -->
     <el-button @click="drawerHeight === '100%' ? (drawerHeight = '50%') : (drawerHeight = '100%')">
       max
     </el-button>
 
     <PreviewIndex></PreviewIndex>
-  </el-drawer>
+  </el-drawer> -->
 </template>
 
 <script setup lang="ts">
