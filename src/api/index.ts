@@ -50,6 +50,26 @@ const API = {
 
     return makeRequest(config);
   },
+
+  submitForm: async function (
+    date: number,
+    title: string,
+    informationType: 'form' | 'url',
+    data: unknown,
+  ) {
+    const config: TRequestConfig = {
+      url: 'http://localhost:5000/create',
+      method: 'DELETE',
+      data: {
+        date,
+        title,
+        informationType,
+        data,
+      },
+    };
+
+    return makeRequest(config);
+  },
 };
 
 export default API;

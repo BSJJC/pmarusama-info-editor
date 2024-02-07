@@ -44,7 +44,15 @@
           </el-form-item>
 
           <el-form-item class="mt-[15vh]">
-            <el-button type="primary" plain round class="w-full h-[5vh]">submit</el-button>
+            <el-button
+              type="primary"
+              plain
+              round
+              class="w-full h-[5vh] text-lg"
+              @click="submitForm"
+            >
+              submit
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -67,7 +75,7 @@ const newComponentName: Ref<string> = ref('');
 
 const dynamicComponents: Ref<Array<{ value: string; deletable?: boolean }>> = ref([
   { value: 'date', deletable: false },
-  { value: 'h1', deletable: false },
+  { value: 'title', deletable: false },
 ]);
 
 function addDynamicComponent(): void {
@@ -112,6 +120,13 @@ function deleteDynamicComponent(index: number): void {
         message: 'Delete canceled',
       });
     });
+}
+
+function submitForm() {
+  console.log(form.date);
+  console.log(form.title);
+  console.log(form.informationType);
+  console.log(form.data);
 }
 
 watch(

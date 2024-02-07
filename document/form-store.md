@@ -30,6 +30,13 @@ The `form` store is responsible for managing form-related data in this applicati
         data: number;
         ```
 
+    - **title**
+      - `data` (String)
+
+        ```typescript
+        data: string;
+        ```
+
     - **h1**
       - `data` (Object)
 

@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full">
-    <el-input-number v-model="date" class="w-full" :max="20301231" />
+  <div>
+    <el-input v-model="title" />
   </div>
 </template>
 
@@ -14,13 +14,13 @@ const props = defineProps({
 
 const { form } = useForm();
 
-const date: Ref<number> = ref(0);
+const title: Ref<string> = ref('');
 
 watch(
-  () => date.value,
+  () => title.value,
   () => {
-    form.date = date.value;
-    form.data.components[props.componentId!].data = date.value;
+    form.title = title.value;
+    form.data.components[props.componentId!].data = title.value;
   },
   {
     immediate: true,
