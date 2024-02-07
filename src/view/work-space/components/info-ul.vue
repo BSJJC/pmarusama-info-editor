@@ -112,11 +112,6 @@ function append(data: TTree, index: number): void {
     cancelButtonText: 'Cancel',
   })
     .then(({ value }) => {
-      ElMessage({
-        type: 'success',
-        message: `Your email is:${value}`,
-      });
-
       const newChild = {
         id: id++,
         label: value,
@@ -154,7 +149,9 @@ function remove(node: Node, data: TTree, index: number): void {
 watch(
   () => dataSources.value,
   () => {
-    form.data.components[props.componentId!].data = dataSources.value;
+    form.data.components[props.componentId!].data = {
+      ul: dataSources.value,
+    };
   },
   {
     immediate: true,
