@@ -1,6 +1,6 @@
 <template>
   <div class="w-full py-10 flex justify-center">
-    <el-scrollbar height="90vh" class="w-full">
+    <el-scrollbar height="85vh" class="w-full">
       <div class="w-full flex justify-center items-center">
         <el-form ref="formRef" :model="form" label-width="200px" class="w-2/3">
           <!-- render all components -->
@@ -11,10 +11,6 @@
               :label="`component ${i.value} :`"
               class="py-4 relative"
             >
-              <!-- 
-                judge if it is deletable.
-                the date, title component cannot be deleted.
-             -->
               <div v-if="i.deletable" class="absolute top-[-20px] right-[-20px]">
                 <el-icon
                   color="#F56C6C"
