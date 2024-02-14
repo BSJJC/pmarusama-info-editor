@@ -1,5 +1,5 @@
 <template>
-  <div class="w-screen h-screen flex flex-col relative px-[10vw] py-[5vh]">
+  <div class="relative w-screen h-screen flex flex-col px-[10vw] py-[5vh]">
     <InfoType></InfoType>
 
     <router-view v-slot="{ Component }">
@@ -9,11 +9,16 @@
         </keep-alive>
       </transition>
     </router-view>
+
+    <Teleport to="body">
+      <TogglePreview></TogglePreview>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
 import InfoType from '@/components/info-type.vue';
+import TogglePreview from '@/components/toggle-preview.vue';
 </script>
 
 <style scoped>
