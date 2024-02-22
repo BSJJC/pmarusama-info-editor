@@ -7,11 +7,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, Ref, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 
 const type: Ref<'form' | 'url'> = ref('form');
 const router = useRouter();
+const route = useRoute();
 
 function toForm(): void {
   router.push('/form');
@@ -20,6 +21,11 @@ function toForm(): void {
 function toUrl(): void {
   router.push('/url');
 }
+
+onMounted(() => {
+  const path = route.path;
+  path.match('form') ? (type.value = 'form') : (type.value = 'url');
+});
 </script>
 
 <style>
