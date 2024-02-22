@@ -34,7 +34,9 @@ The `form` store is responsible for managing form-related data in this applicati
       - `data` (String)
 
         ```typescript
-        data: string;
+        data:{
+            text: string
+        };
         ```
 
     - **h1**

@@ -20,7 +20,9 @@ watch(
   () => title.value,
   () => {
     form.title = title.value;
-    form.data.components[props.componentId!].data = title.value;
+    form.data.components[props.componentId!].data = {
+      text: title.value,
+    };
   },
   {
     immediate: true,

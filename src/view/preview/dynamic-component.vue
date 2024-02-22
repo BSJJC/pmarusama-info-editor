@@ -12,6 +12,7 @@ type TComponent = {
 };
 
 const props = defineProps<TComponent>();
+console.log(props.componentName);
 
 const dynamicComponent: Ref<HTMLElement | undefined> = importDynamicComponent(props.componentName);
 </script>
