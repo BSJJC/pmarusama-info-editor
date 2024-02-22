@@ -20,6 +20,9 @@ dependencies:
   element-plus:
     specifier: ^2.3.14
     version: 2.3.14(vue@3.3.4)
+  link-prevue:
+    specifier: ^2.0.1
+    version: 2.0.1(vue@3.3.4)
   lottie-web:
     specifier: ^5.12.2
     version: 5.12.2
@@ -2071,6 +2074,14 @@ packages:
   /lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
     dev: true
+
+  /link-prevue@2.0.1(vue@3.3.4):
+    resolution: {integrity: sha512-pWr6Hr4wQhuromuSia76ciALzXkXnhuL5TpIazqc726rhXyBmI3Eh10w4+9oO5pHqBKz3NE0RN48cZwajjvTyQ==}
+    peerDependencies:
+      vue: ^3.3.11
+    dependencies:
+      vue: 3.3.4
+    dev: false
 
   /lint-staged@14.0.1:
     resolution: {integrity: sha512-Mw0cL6HXnHN1ag0mN/Dg4g6sr8uf8sn98w2Oc1ECtFto9tvRF7nkXGJRbx8gPlHyoR0pLyBr2lQHbWwmUHe1Sw==}
