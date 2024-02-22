@@ -6,38 +6,32 @@
     </div>
 
     <TransitionGroup>
-      <div v-if="legalURL === null" class="w-full h-full rounded-lg">no URL</div>
-
-      <div v-else-if="legalURL === false" class="w-full h-full rounded-lg">非法URL</div>
-
-      <iframe v-else title="url preview" :src="url" class="w-full h-full rounded-lg"></iframe>
+      <div
+        v-if="legalURL === false"
+        class="w-full h-full rounded-lg flex justify-center items-center"
+      >
+        <!-- <lottieAniamtion :data="animationData" class="w-1/2"></lottieAniamtion> -->
+      </div>
     </TransitionGroup>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, Ref } from 'vue';
+import { ref, Ref, onBeforeMount } from 'vue';
+import lottieAniamtion from '@/components/lottie-aniamtion.vue';
 
 const _url: Ref<string> = ref('');
 const url: Ref<string> = ref('');
 
-const legalURL: Ref<boolean | null> = ref(null);
-const urlRegex = /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/;
+const legalURL: Ref<boolean> = ref(false);
 
-function completeInput(): void {
-  if (!_url.value) {
-    legalURL.value = null;
-    url.value = '';
-    return;
-  }
+const animationData: Ref<object | undefined> = ref<object>();
 
-  if (urlRegex.test(_url.value)) {
-    legalURL.value = true;
-    url.value = _url.value;
-  } else {
-    legalURL.value = false;
-  }
-}
+async function completeInput(): Promise<void> {}
+
+onBeforeMount(async () => {
+  animationData.value = (await import('@/assets/lottieAnimations/404.json')).default;
+});
 </script>
 
 <style></style>
