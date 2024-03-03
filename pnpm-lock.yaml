@@ -14,18 +14,12 @@ dependencies:
   '@types/node':
     specifier: ^20.6.2
     version: 20.6.2
-  animejs:
-    specifier: ^3.2.1
-    version: 3.2.1
   axios:
     specifier: ^1.4.0
     version: 1.4.0
   element-plus:
     specifier: ^2.3.14
     version: 2.3.14(vue@3.3.4)
-  link-prevue:
-    specifier: ^2.0.1
-    version: 2.0.1(vue@3.3.4)
   pinia:
     specifier: ^2.1.7
     version: 2.1.7(typescript@5.0.2)(vue@3.3.4)
@@ -1015,10 +1009,6 @@ packages:
       require-from-string: 2.0.2
       uri-js: 4.4.1
     dev: true
-
-  /animejs@3.2.1:
-    resolution: {integrity: sha512-sWno3ugFryK5nhiDm/2BKeFCpZv7vzerWUcUPyAZLDhMek3+S/p418ldZJbJXo5ZUOpfm2kP2XRO4NJcULMy9A==}
-    dev: false
 
   /ansi-escapes@5.0.0:
     resolution: {integrity: sha512-5GFMVX8HqE/TB+FuBJGuO5XG0WrsA6ptUqoODaT/n9mmUaZFkqnBueB4leqGBCmrUHnCnC4PCZTCd0E7QQ83bA==}
@@ -2102,14 +2092,6 @@ packages:
   /lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
     dev: true
-
-  /link-prevue@2.0.1(vue@3.3.4):
-    resolution: {integrity: sha512-pWr6Hr4wQhuromuSia76ciALzXkXnhuL5TpIazqc726rhXyBmI3Eh10w4+9oO5pHqBKz3NE0RN48cZwajjvTyQ==}
-    peerDependencies:
-      vue: ^3.3.11
-    dependencies:
-      vue: 3.3.4
-    dev: false
 
   /lint-staged@14.0.1:
     resolution: {integrity: sha512-Mw0cL6HXnHN1ag0mN/Dg4g6sr8uf8sn98w2Oc1ECtFto9tvRF7nkXGJRbx8gPlHyoR0pLyBr2lQHbWwmUHe1Sw==}

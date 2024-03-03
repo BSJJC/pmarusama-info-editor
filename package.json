@@ -13,10 +13,8 @@
     "@element-plus/icons-vue": "^2.3.1",
     "@lottiefiles/lottie-player": "^2.0.3",
     "@types/node": "^20.6.2",
-    "animejs": "^3.2.1",
     "axios": "^1.4.0",
     "element-plus": "^2.3.14",
-    "link-prevue": "^2.0.1",
     "pinia": "^2.1.7",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5"

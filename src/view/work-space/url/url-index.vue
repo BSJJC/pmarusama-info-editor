@@ -9,13 +9,13 @@
             v-model="inputUrl"
             @change="checkIfSiteExists()"
             @input="isSiteAvailable = null"
-            @keyup.enter="urlInputRef.blur()"
+            @keyup.enter="urlInputRef!.blur()"
           />
         </div>
 
         <!-- animations -->
         <div
-          class="w-full h-[50vh] flex justify-center items-center flex-col overflow-hidden text-[2rem] font-bold bg-red-"
+          class="w-full h-[50vh] flex justify-center items-center flex-col overflow-hidden text-[2rem] font-bold"
         >
           <transition mode="out-in">
             <div
