@@ -1,12 +1,7 @@
 <template>
   <div class="flex flex-col space-y-4">
     <div v-for="(i, index) in texts.length" :key="i" class="flex justify-between items-center">
-      <el-input
-        v-if="texts[i - 1] !== null"
-        type="textarea"
-        class="w-[80%]"
-        v-model="texts[index]"
-      />
+      <el-input v-if="texts[i - 1] !== null" type="textarea" v-model="texts[index]" />
 
       <div v-else class="mx-1 text-[#e6a23c] text-[1rem]">
         <b>an empty line here</b>
@@ -61,4 +56,8 @@ watch(
 );
 </script>
 
-<style></style>
+<style scoped>
+.el-textarea {
+  width: 80%;
+}
+</style>

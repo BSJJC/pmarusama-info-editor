@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full">
-    <el-input-number v-model="date" class="w-full" :max="20301231" />
+  <div>
+    <el-input-number v-model="date" :min="20000000" :max="20301231" />
   </div>
 </template>
 
@@ -29,4 +29,8 @@ watch(
 );
 </script>
 
-<style></style>
+<style scoped>
+.el-input-number {
+  width: 100%;
+}
+</style>

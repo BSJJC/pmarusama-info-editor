@@ -5,7 +5,6 @@
         v-if="texts[i - 1] !== null"
         type="textarea"
         id="textarea-center"
-        class="w-[80%]"
         v-model="texts[index]"
       />
 
@@ -63,8 +62,12 @@ watch(
 );
 </script>
 
-<style>
+<style scoped>
 #textarea-center {
   text-align: center;
+}
+
+.el-textarea {
+  width: 80%;
 }
 </style>

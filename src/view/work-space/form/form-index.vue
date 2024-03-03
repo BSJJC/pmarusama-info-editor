@@ -21,7 +21,10 @@
                 </el-icon>
               </div>
 
-              <DynamicComponent :component-id="index" :component-name="i.value"></DynamicComponent>
+              <dynamic-component
+                :component-id="index"
+                :component-name="i.value"
+              ></dynamic-component>
             </el-form-item>
           </TransitionGroup>
 
@@ -59,13 +62,19 @@
   </div>
 </template>
 
+<script lang="ts">
+export default {
+  name: 'form-index',
+};
+</script>
+
 <script setup lang="ts">
-import { ref, Ref, watch, h } from 'vue';
+import { ref, Ref, watch, h, defineAsyncComponent } from 'vue';
 import { useForm } from '@/store/useForm';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import newComponentNames from './newComponentNames.ts';
 
-import DynamicComponent from './dynamic-component.vue';
+const DynamicComponent = defineAsyncComponent(() => import('./dynamic-component.vue'));
 
 const { form } = useForm();
 

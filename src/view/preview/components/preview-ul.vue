@@ -11,14 +11,16 @@
       </p>
 
       <div v-if="i[0].children?.length !== 0" class="ml-[30px]">
-        <ulChilde :data="{ ul: i[0].children! }"></ulChilde>
+        <ul-childe :data="{ ul: i[0].children! }"></ul-childe>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import ulChilde from './ul-childe-component.vue';
+import { defineAsyncComponent } from 'vue';
+
+const ulChilde = defineAsyncComponent(() => import('./ul-childe-component.vue'));
 
 type TTree = {
   label: string;

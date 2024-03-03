@@ -58,8 +58,15 @@
   </div>
 </template>
 
+<script lang="ts">
+export default {
+  name: 'url-index',
+};
+</script>
+
 <script setup lang="ts">
 import { ref, Ref } from 'vue';
+import '@lottiefiles/lottie-player';
 
 import waiting from '@/assets/lottieAnimations/waiting.json';
 import success from '@/assets/lottieAnimations/success.json';
@@ -73,7 +80,7 @@ const isSiteAvailable: Ref<boolean | null> = ref(null);
 
 /**
  * Checks if the site exists by making a request to the specified URL.
- * Updates the `isSiteAvailable ` variable accordingly.
+ * Updates the `isSiteAvailable` variable accordingly.
  * @returns {Promise<void>} A Promise that resolves when the site existence check is complete.
  */
 async function checkIfSiteExists(): Promise<void> {

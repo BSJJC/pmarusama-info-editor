@@ -1,17 +1,19 @@
 <template>
   <div id="preview-body" class="w-full h-100vh rounded-lg px-4 py-2">
-    <dynamicComponent
+    <dynamic-component
       v-for="(i, index) in form.data.components"
       :key="index"
       :component-name="i.componentName"
       :data="i.data"
-    ></dynamicComponent>
+    ></dynamic-component>
   </div>
 </template>
 
 <script setup lang="ts">
+import { defineAsyncComponent } from 'vue';
 import { useForm } from '@/store/useForm';
-import dynamicComponent from './dynamic-component.vue';
+
+const dynamicComponent = defineAsyncComponent(() => import('./dynamic-component.vue'));
 
 const { form } = useForm();
 </script>

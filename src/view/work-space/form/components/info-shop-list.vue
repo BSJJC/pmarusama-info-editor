@@ -1,14 +1,14 @@
 <template>
   <div class="space-y-4">
     <div class="flex w-full justify-between">
-      <el-input
-        v-model="searchingShopName"
-        class="w-[45%]"
-        placeholder="search shop name"
-        clearable
-      />
+      <el-input v-model="searchingShopName" placeholder="search shop name" clearable />
 
-      <el-button type="success" plain class="w-[45%]" @click="addNewShopImageVisible = true">
+      <el-button
+        type="success"
+        plain
+        class="w-[45%] ml-[5%]"
+        @click="addNewShopImageVisible = true"
+      >
         add new shop
       </el-button>
     </div>
