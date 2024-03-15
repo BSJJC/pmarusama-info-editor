@@ -2,22 +2,19 @@
   <div>
     <el-form>
       <div v-for="(image, index) in images" :key="index" class="mb-14 flex items-center">
-        <div class="space-y-3 w-[80%]">
-          <el-form-item label="url: ">
-            <el-input v-model="image.url" />
+        <div class="space-y-4 w-[80%]">
+          <el-form-item label="file: ">
+            <el-button @click="selectFile(index)">selct file</el-button>
+            <input ref="uploadRef" type="file" class="hidden" @change="handleFiles(index)" />
           </el-form-item>
 
           <el-form-item label="alt: ">
             <el-input v-model="image.alt" />
           </el-form-item>
 
-          <Transition>
-            <el-form-item v-if="image.url" label="preview: ">
-              <el-image :src="image.url" />
-
-              <span>{{ image.alt }}</span>
-            </el-form-item>
-          </Transition>
+          <el-form-item label="preview" v-if="previewUrls[index]">
+            <img :src="previewUrls[index]" alt="" class="max-h-[200px]" />
+          </el-form-item>
         </div>
 
         <el-button
@@ -51,12 +48,24 @@ const props = defineProps({
 
 const { form } = useForm();
 
+const uploadRef = ref();
+
 const images: Ref<Array<TImages>> = ref([
   {
     url: '',
     alt: '',
   },
 ]);
+const previewUrls: Ref<Array<string>> = ref([]);
+
+function selectFile(index: number) {
+  uploadRef.value[index].click();
+}
+
+function handleFiles(index: number) {
+  const files = uploadRef.value[index].files;
+  previewUrls.value.push(URL.createObjectURL(files[0]));
+}
 
 function addNewImage(): void {
   images.value.push({
@@ -83,14 +92,4 @@ watch(
 );
 </script>
 
-<style>
-.v-enter-active,
-.v-leave-active {
-  transition: all 0.2s ease-in-out;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-}
-</style>
+<style></style>

@@ -11,3 +11,13 @@ a {
   color: whitesmoke;
   background: #f60;
 }
+
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.2s ease-in-out;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
