@@ -1,24 +1,30 @@
 <template>
   <div>
     <el-form>
-      <div v-for="(image, index) in images" :key="index" class="mb-4 flex items-center">
-        <div class="space-y-2 w-[80%]">
-          <el-form-item label="url: ">
-            <el-input v-model="image.url" />
+      <div v-for="(image, index) in images" :key="index" class="mb-14 flex items-center">
+        <el-form label-width="auto" class="space-y-4 w-[80%]">
+          <el-form-item label="file: ">
+            <el-button type="primary" @click="selectFile(index)">selct file</el-button>
+            <input ref="uploadRef" type="file" class="hidden" @change="handleFiles(index)" />
           </el-form-item>
 
           <el-form-item label="alt: ">
             <el-input v-model="image.alt" />
           </el-form-item>
 
-          <Transition>
-            <el-form-item v-if="image.url" label="preview: ">
-              <el-image :src="image.url" />
-
-              <span class="w-full text-center">{{ image.alt }}</span>
-            </el-form-item>
-          </Transition>
-        </div>
+          <el-form-item label="preview: " v-if="previewUrls[index]">
+            <div class="w-full h-full flex justify-center items-center">
+              <transition name="preview-img" mode="out-in">
+                <img
+                  :src="previewUrls[index]"
+                  :key="previewUrls[index]"
+                  :alt="image.alt"
+                  class="h-[300px] rounded-lg border-[10px] box-content"
+                />
+              </transition>
+            </div>
+          </el-form-item>
+        </el-form>
 
         <el-button
           type="danger"
@@ -51,22 +57,36 @@ const props = defineProps({
 
 const { form } = useForm();
 
+const uploadRef = ref();
+
 const images: Ref<Array<TImages>> = ref([
   {
     url: '',
     alt: '',
   },
 ]);
+const previewUrls: Ref<Array<string>> = ref([]);
+
+function selectFile(index: number) {
+  uploadRef.value[index].click();
+}
+
+function handleFiles(index: number) {
+  const files = uploadRef.value[index].files;
+  previewUrls.value[index] = URL.createObjectURL(files[0]);
+}
 
 function addNewImage(): void {
   images.value.push({
     url: '',
     alt: '',
   });
+  previewUrls.value.push('');
 }
 
 function deleteIamge(index: number): void {
   images.value.splice(index, 1);
+  previewUrls.value.splice(index, 1);
 }
 
 watch(
@@ -84,13 +104,14 @@ watch(
 </script>
 
 <style scoped>
-.v-enter-active,
-.v-leave-active {
-  transition: all 0.2s ease-in-out;
+.preview-img-enter-active,
+.preview-img-leave-active {
+  transition: all 0.3s ease-in-out;
 }
 
-.v-enter-from,
-.v-leave-to {
+.preview-img-enter-from,
+.preview-img-leave-to {
   opacity: 0;
+  transform: translateY(-10px);
 }
 </style>
