@@ -2,9 +2,9 @@
   <div>
     <el-form>
       <div v-for="(image, index) in images" :key="index" class="mb-14 flex items-center">
-        <div class="space-y-4 w-[80%]">
+        <el-form label-width="auto" class="space-y-4 w-[80%]">
           <el-form-item label="file: ">
-            <el-button @click="selectFile(index)">selct file</el-button>
+            <el-button type="primary" @click="selectFile(index)">selct file</el-button>
             <input ref="uploadRef" type="file" class="hidden" @change="handleFiles(index)" />
           </el-form-item>
 
@@ -12,10 +12,17 @@
             <el-input v-model="image.alt" />
           </el-form-item>
 
-          <el-form-item label="preview" v-if="previewUrls[index]">
-            <img :src="previewUrls[index]" alt="" class="max-h-[200px]" />
+          <el-form-item label="preview: " v-if="previewUrls[index]">
+            <transition name="preview-img" mode="out-in">
+              <img
+                :src="previewUrls[index]"
+                :key="previewUrls[index]"
+                :alt="image.alt"
+                class="h-[300px] rounded-lg border-[10px] box-content"
+              />
+            </transition>
           </el-form-item>
-        </div>
+        </el-form>
 
         <el-button
           type="danger"
@@ -64,7 +71,7 @@ function selectFile(index: number) {
 
 function handleFiles(index: number) {
   const files = uploadRef.value[index].files;
-  previewUrls.value.push(URL.createObjectURL(files[0]));
+  previewUrls.value[index] = URL.createObjectURL(files[0]);
 }
 
 function addNewImage(): void {
@@ -72,10 +79,12 @@ function addNewImage(): void {
     url: '',
     alt: '',
   });
+  previewUrls.value.push('');
 }
 
 function deleteIamge(index: number): void {
   images.value.splice(index, 1);
+  previewUrls.value.splice(index, 1);
 }
 
 watch(
@@ -92,4 +101,15 @@ watch(
 );
 </script>
 
-<style></style>
+<style scoped>
+.preview-img-enter-active,
+.preview-img-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.preview-img-enter-from,
+.preview-img-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+</style>
