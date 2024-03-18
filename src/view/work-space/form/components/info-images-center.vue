@@ -72,8 +72,13 @@ function selectFile(index: number) {
 }
 
 function handleFiles(index: number) {
-  const files = uploadRef.value[index].files;
-  previewUrls.value[index] = URL.createObjectURL(files[0]);
+  const file = uploadRef.value[index].files[0];
+  previewUrls.value[index] = URL.createObjectURL(file[0]);
+
+  images.value[index] = {
+    url: URL.createObjectURL(file),
+    alt: file.name.substring(0, file.name.length - 4),
+  };
 }
 
 function addNewImage(): void {

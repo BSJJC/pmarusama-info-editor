@@ -73,8 +73,10 @@ function handleFiles(index: number) {
   const file = uploadRef.value[index].files[0];
   previewUrls.value[index] = URL.createObjectURL(file);
 
-  const alt: string = file.name;
-  images.value[index].alt = alt.substring(0, alt.length - 4);
+  images.value[index] = {
+    url: URL.createObjectURL(file),
+    alt: file.name.substring(0, file.name.length - 4),
+  };
 }
 
 function addNewImage(): void {
