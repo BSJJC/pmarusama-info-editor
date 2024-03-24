@@ -11,39 +11,61 @@
       </div>
 
       <!-- not empty line -->
-      <div v-else class="w-[80%] flex flex-col gap-4">
+      <div v-else class="w-[95%] flex flex-col gap-y-4">
         <div v-for="(msg, msgIndex) in msgs" :key="msgIndex">
-          <!-- string msg -->
-          <el-input v-if="msg.type === 'string'" type="textarea" v-model="msg.msg" />
-
-          <!-- hyperlink msg -->
-          <div
-            v-else-if="(msg.type = 'hyperlink')"
-            class="flex flex-col text-base text-[#909399] gap-y-2"
-          >
-            <div class="flex flex-row gap-x-2">
-              <span>text:</span>
-              <el-input v-model="msg.msg.text" />
+          <div class="flex justify-between items-center">
+            <!-- string msg -->
+            <div v-if="msg.type === 'string'" type="textarea" class="w-[80%]">
+              <el-input v-model="msg.msg" />
             </div>
 
-            <div class="flex flex-row gap-x-2">
-              <span>link:</span>
-              <el-input v-model="msg.msg.link" />
+            <!-- hyperlink msg -->
+            <div
+              v-else-if="(msg.type = 'hyperlink')"
+              class="w-[80%] flex flex-col text-base text-[#909399] gap-y-2"
+            >
+              <div class="flex flex-row gap-x-2">
+                <span>text:</span>
+                <el-input v-model="msg.msg.text" />
+              </div>
+
+              <div class="flex flex-row gap-x-2">
+                <span>link:</span>
+                <el-input v-model="msg.msg.link" />
+              </div>
+            </div>
+
+            <div class="w-[15%]">
+              <el-button
+                :disabled="msgs.length === 1"
+                type="danger"
+                plain
+                @click="deletePartOfLine(index, msgIndex)"
+              >
+                delete
+              </el-button>
             </div>
           </div>
         </div>
       </div>
 
-      <el-button :disabled="texts.length === 1" type="danger" plain @click="deleteLine(index)">
+      <el-button
+        :disabled="texts.length === 1"
+        type="danger"
+        size="large"
+        plain
+        @click="deleteLine(index)"
+      >
         delete
       </el-button>
     </div>
 
+    <!-- function btns -->
     <div class="flex justify-between items-center">
       <el-button @click="addNewLine" type="primary" plain>start a new line</el-button>
 
       <div>
-        <el-popover placement="top-start" wdith="350" trigger="hover">
+        <el-popover placement="bottom-start" wdith="350" trigger="hover">
           <template #reference>
             <el-button
               @click="connectMsg('hyperlink')"
@@ -65,7 +87,7 @@
           </template>
         </el-popover>
 
-        <el-popover placement="top-start" wdith="350" trigger="hover">
+        <el-popover placement="bottom-start" wdith="350" trigger="hover">
           <template #reference>
             <el-button
               @click="connectMsg('string')"
@@ -159,6 +181,10 @@ function addEmptyLine(): void {
 
 function deleteLine(index: number) {
   texts.value.splice(index, 1);
+}
+
+function deletePartOfLine(index: number, msgIndex: number): void {
+  texts.value[index]!.splice(msgIndex, 1);
 }
 
 watch(
