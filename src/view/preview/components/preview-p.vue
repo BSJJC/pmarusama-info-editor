@@ -1,18 +1,12 @@
 <template>
   <div>
-    <div v-for="(msgs, msgIndex) in texts" :key="msgIndex">
-      <div v-for="(msg, msgIndex) in msgs" :key="msgIndex">
-        <div v-if="msg.type === 'string'" v-html="msg.msg"></div>
-
-        <a v-else-if="msg.type === 'hyperlink'" :href="msg.msg.link" target="_blank">
-          {{ msg.msg.text }}
-        </a>
-      </div>
-    </div>
+    <div v-for="(i, index) in _texts" :key="index" v-html="i"></div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { onBeforeMount } from 'vue';
+
 type TstringMsg = {
   type: 'string';
   msg: string;
@@ -36,12 +30,35 @@ const props = defineProps({
   data: Object as () => TData,
 });
 
-const texts = props.data?.texts;
+const texts = props.data!.texts;
+const _texts: Array<string | null> = [];
+
+onBeforeMount(() => {
+  for (let i = 0; i < texts.length; i++) {
+    const megs = texts[i];
+
+    if (megs === null) {
+      _texts[i] = null;
+      continue;
+    }
+
+    _texts[i] = '';
+
+    for (let j = 0; j < megs.length; j++) {
+      switch (megs[j].type) {
+        case 'string':
+          (_texts[i] as string) += megs[j].msg;
+          break;
+
+        case 'hyperlink':
+          (_texts[i] as string) += ` <a href=${(megs[j] as ThyperlinkMsg).msg.link} target=_blank>${
+            (megs[j] as ThyperlinkMsg).msg.text
+          }</a> `;
+          break;
+      }
+    }
+  }
+});
 </script>
 
-<style scoped>
-p {
-  line-height: 1.8;
-  color: #787878;
-}
-</style>
+<style></style>
