@@ -6,7 +6,7 @@
       class="flex justify-between items-center p-2 bg-[#a6a9ad20] rounded-lg"
     >
       <!-- empty line -->
-      <div v-if="msgs === null" class="mx-1 text-[#e6a23c] text-[1rem]">
+      <div v-if="msgs === null" class="mx-1 text-[#e6a23c] text-[1rem] w-full text-center">
         <b>an empty line here</b>
       </div>
 
@@ -15,8 +15,8 @@
         <div v-for="(msg, msgIndex) in msgs" :key="msgIndex">
           <div class="flex justify-between items-center">
             <!-- string msg -->
-            <div v-if="msg.type === 'string'" type="textarea" class="w-[80%]">
-              <el-input v-model="msg.msg" />
+            <div v-if="msg.type === 'string'" class="w-[80%]">
+              <el-input v-model="msg.msg" type="textarea" id="el-textarea__inner-center" />
             </div>
 
             <!-- hyperlink msg -->
@@ -201,4 +201,8 @@ watch(
 );
 </script>
 
-<style></style>
+<style>
+#el-textarea__inner-center {
+  text-align: center;
+}
+</style>

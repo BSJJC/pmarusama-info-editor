@@ -15,8 +15,8 @@
         <div v-for="(msg, msgIndex) in msgs" :key="msgIndex">
           <div class="flex justify-between items-center">
             <!-- string msg -->
-            <div v-if="msg.type === 'string'" type="textarea" class="w-[80%]">
-              <el-input v-model="msg.msg" />
+            <div v-if="msg.type === 'string'" class="w-[80%]">
+              <el-input v-model="msg.msg" type="textarea" />
             </div>
 
             <!-- hyperlink msg -->
