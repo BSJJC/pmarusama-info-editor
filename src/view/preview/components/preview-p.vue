@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div v-for="(i, index) in _texts" :key="index" v-html="i"></div>
+    <div v-for="(i, index) in _texts" :key="index">
+      <div v-if="i" v-html="i"></div>
+
+      <br v-else />
+    </div>
   </div>
 </template>
 
