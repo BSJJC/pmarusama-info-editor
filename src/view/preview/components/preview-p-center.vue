@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="(i, index) in _texts" :key="index">
-      <div v-if="i" v-html="i" class="w-full text-center"></div>
+      <span v-if="i" v-html="i" class="w-full text-center"></span>
 
       <br v-else />
     </div>
@@ -11,12 +11,12 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-type TstringMsg = {
+type TStringMsg = {
   type: 'string';
   msg: string;
 };
 
-type ThyperlinkMsg = {
+type THyperlinkMsg = {
   type: 'hyperlink';
   msg: {
     text: string;
@@ -24,10 +24,10 @@ type ThyperlinkMsg = {
   };
 };
 
-type TtextMsg = Array<TstringMsg | ThyperlinkMsg>;
+type TTextMsg = Array<TStringMsg | THyperlinkMsg>;
 
 type TData = {
-  texts: Array<TtextMsg | null>;
+  texts: Array<TTextMsg | null>;
 };
 
 const props = defineProps({

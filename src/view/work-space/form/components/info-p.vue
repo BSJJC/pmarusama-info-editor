@@ -71,14 +71,14 @@
               @click="connectMsg('hyperlink')"
               type="primary"
               plain
-              :disabled="addEmptyLineActive()"
+              :disabled="isLastLineEmpty()"
             >
               connect hyperlink
             </el-button>
           </template>
 
           <template #default>
-            <span v-if="!addEmptyLineActive()">
+            <span v-if="!isLastLineEmpty()">
               this operation does not create a new line, but as part of the previous line of an a
               tag.
             </span>
@@ -93,14 +93,14 @@
               @click="connectMsg('string')"
               type="primary"
               plain
-              :disabled="addEmptyLineActive()"
+              :disabled="isLastLineEmpty()"
             >
               connect string
             </el-button>
           </template>
 
           <template #default>
-            <span v-if="!addEmptyLineActive()">
+            <span v-if="!isLastLineEmpty()">
               this operation does not create a new line, but as part of the previous line of an a
               tag.
             </span>
@@ -125,12 +125,12 @@ const props = defineProps({
 
 const { form } = useForm();
 
-type TstringMsg = {
+type TStringMsg = {
   type: 'string';
   msg: string;
 };
 
-type ThyperlinkMsg = {
+type THyperlinkMsg = {
   type: 'hyperlink';
   msg: {
     text: string;
@@ -138,9 +138,9 @@ type ThyperlinkMsg = {
   };
 };
 
-type TtextMsg = Array<TstringMsg | ThyperlinkMsg>;
+type TTextMsg = Array<TStringMsg | THyperlinkMsg>;
 
-const texts: Ref<Array<TtextMsg | null>> = ref([[{ type: 'string', msg: '' }]]);
+const texts: Ref<Array<TTextMsg | null>> = ref([[{ type: 'string', msg: '' }]]);
 
 function addNewLine(): void {
   texts.value.push([
@@ -154,23 +154,21 @@ function addNewLine(): void {
 function connectMsg(type: 'string' | 'hyperlink'): void {
   const msgIndex = texts.value.length - 1;
 
-  if (type === 'hyperlink') {
-    texts.value[msgIndex]!.push({
-      type: 'hyperlink',
-      msg: {
-        text: '',
-        link: '',
-      },
-    });
-  } else if (type === 'string') {
-    texts.value[msgIndex]!.push({
-      type: 'string',
-      msg: '',
-    });
+  switch (type) {
+    case 'hyperlink':
+      texts.value[msgIndex]!.push({
+        type: 'hyperlink',
+        msg: { text: '', link: '' },
+      });
+      break;
+
+    case 'string':
+      texts.value[msgIndex]!.push({ type: 'string', msg: '' });
+      break;
   }
 }
 
-function addEmptyLineActive(): boolean {
+function isLastLineEmpty(): boolean {
   if (texts.value[texts.value.length - 1]) return false;
   else return true;
 }
