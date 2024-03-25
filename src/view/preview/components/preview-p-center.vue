@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount } from 'vue';
+import { computed } from 'vue';
 
 type TstringMsg = {
   type: 'string';
@@ -35,33 +35,24 @@ const props = defineProps({
 });
 
 const texts = props.data!.texts;
-const _texts: Array<string | null> = [];
 
-onBeforeMount(() => {
-  for (let i = 0; i < texts.length; i++) {
-    const megs = texts[i];
+const _texts = computed(() => {
+  return texts.map((texts) => {
+    if (!texts) return null;
 
-    if (megs === null) {
-      _texts[i] = null;
-      continue;
-    }
-
-    _texts[i] = '';
-
-    for (let j = 0; j < megs.length; j++) {
-      switch (megs[j].type) {
+    return texts.reduce((acc, msg) => {
+      switch (msg.type) {
         case 'string':
-          (_texts[i] as string) += megs[j].msg;
-          break;
+          return acc + msg.msg;
 
         case 'hyperlink':
-          (_texts[i] as string) += ` <a href=${(megs[j] as ThyperlinkMsg).msg.link} target=_blank>${
-            (megs[j] as ThyperlinkMsg).msg.text
-          }</a> `;
-          break;
+          return `${acc} <a href="${msg.msg.link}" target="_blank">${msg.msg.text}</a> `;
+
+        default:
+          return acc;
       }
-    }
-  }
+    }, '');
+  });
 });
 </script>
 
