@@ -15,7 +15,7 @@
         <!-- subtitles -->
         <el-form-item v-if="listNote.subtitles" label="subtitles">
           <el-input
-            v-for="(subtitle, index) in listNote.subtitles"
+            v-for="(_, index) in listNote.subtitles"
             :key="index"
             v-model="listNote.subtitles[index]"
           />
@@ -27,7 +27,7 @@
             <div v-for="(maxRows, rowIndex) in listNote.children" :key="rowIndex" class="">
               <div class="flex gap-x-2">
                 <el-input
-                  v-for="(maxCols, colIndex) in maxRows"
+                  v-for="(_, colIndex) in maxRows"
                   :key="colIndex"
                   v-model="listNote.children[rowIndex][colIndex]"
                   @input="reRenderChildren(listNoteIndex)"
