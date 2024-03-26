@@ -19,6 +19,5 @@ h1 {
   font-size: 2rem;
   color: #f60;
   font-weight: bold;
-  margin-bottom: 1.125rem;
 }
 </style>

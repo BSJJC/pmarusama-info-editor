@@ -21,7 +21,6 @@ const date = props.data?.toString();
 
 <style scoped>
 #date {
-  margin-bottom: 1rem;
   font-size: 1.5rem;
   color: #f60;
   font-family: 'Fredoka One', sans-serif;

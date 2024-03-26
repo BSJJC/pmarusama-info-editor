@@ -4,7 +4,7 @@ body {
 }
 
 a {
-  color: #f60;
+  color: #f60 !important;
 }
 
 ::selection {
