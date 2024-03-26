@@ -40,6 +40,10 @@ const newComponentNames: Array<TNewComponentName> = [
     value: 'ul',
     label: 'ul',
   },
+  {
+    value: 'list-notes',
+    label: 'list-notes',
+  },
 ];
 
 export default newComponentNames;
