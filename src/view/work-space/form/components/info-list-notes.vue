@@ -54,13 +54,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref } from 'vue';
+import { ref, Ref, watch } from 'vue';
+import syncData from '@/utils/syncData';
 
 type TListNote = Array<{
   title: string;
   subtitles?: Array<string>;
   children: Array<Array<string>>;
 }>;
+
+const props = defineProps({
+  componentId: Number,
+});
 
 const listNoteData: Ref<TListNote> = ref([
   {
@@ -210,6 +215,17 @@ function reRenderChildren(listNoteIndex: number): void {
 function deleteListNote(listNoteIndex: number): void {
   listNoteData.value.splice(listNoteIndex, 1);
 }
+
+watch(
+  () => listNoteData.value,
+  () => {
+    syncData(props.componentId!, { listNotes: listNoteData.value });
+  },
+  {
+    immediate: true,
+    deep: true,
+  },
+);
 </script>
 
 <style scoped>

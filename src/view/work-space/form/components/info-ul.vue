@@ -47,7 +47,7 @@
 import { ref, watch } from 'vue';
 import type Node from 'element-plus/es/components/tree/src/model/node';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { useForm } from '@/store/useForm';
+import syncData from '@/utils/syncData';
 
 type TTree = {
   id: number;
@@ -58,8 +58,6 @@ type TTree = {
 const props = defineProps({
   componentId: Number,
 });
-
-const { form } = useForm();
 
 let id = 0;
 
@@ -149,9 +147,7 @@ function remove(node: Node, data: TTree, index: number): void {
 watch(
   () => dataSources.value,
   () => {
-    form.data.components[props.componentId!].data = {
-      ul: dataSources.value,
-    };
+    syncData(props.componentId!, { ul: dataSources.value });
   },
   {
     immediate: true,

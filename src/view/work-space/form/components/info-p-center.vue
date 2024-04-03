@@ -117,13 +117,11 @@
 
 <script setup lang="ts">
 import { ref, Ref, watch } from 'vue';
-import { useForm } from '@/store/useForm';
+import syncData from '@/utils/syncData';
 
 const props = defineProps({
   componentId: Number,
 });
-
-const { form } = useForm();
 
 type TStringMsg = {
   type: 'string';
@@ -194,9 +192,7 @@ function deletePartOfLine(index: number, msgIndex: number): void {
 watch(
   () => texts.value,
   () => {
-    form.data.components[props.componentId!].data = {
-      texts: texts.value,
-    };
+    syncData(props.componentId!, { texts: texts.value });
   },
   {
     immediate: true,

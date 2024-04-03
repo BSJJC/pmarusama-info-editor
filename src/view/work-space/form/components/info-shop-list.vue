@@ -170,14 +170,12 @@
 import { ref, Ref, watch, onBeforeMount } from 'vue';
 import { UploadInstance, UploadRawFile, UploadFile } from 'element-plus';
 import { ElNotification } from 'element-plus';
-import { useForm } from '@/store/useForm';
+import syncData from '@/utils/syncData';
 import API from '@/api';
 
 const props = defineProps({
   componentId: Number,
 });
-
-const { form } = useForm();
 
 const addNewShopImageVisible: Ref<boolean> = ref(false);
 const uploadRef = ref<UploadInstance>();
@@ -354,9 +352,7 @@ watch(
         alt: shop.alt,
       }));
 
-    form.data.components[props.componentId!].data = {
-      shopList: shopList,
-    };
+    syncData(props.componentId!, { shopList: shopList });
   },
   {
     immediate: true,

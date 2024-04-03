@@ -107,15 +107,13 @@
 
 <script setup lang="ts">
 import { ref, Ref, watch } from 'vue';
-import { useForm } from '@/store/useForm';
+import syncData from '@/utils/syncData';
 
 type TText = Array<Array<Array<string | null>>>;
 
 const props = defineProps({
   componentId: Number,
 });
-
-const { form } = useForm();
 
 const rows: Ref<number> = ref(3);
 const cols: Ref<number> = ref(3);
@@ -252,9 +250,7 @@ watch(
 watch(
   () => table.value,
   () => {
-    form.data.components[props.componentId!].data = {
-      table: table.value,
-    };
+    syncData(props.componentId!, { table: table.value });
   },
   {
     immediate: true,

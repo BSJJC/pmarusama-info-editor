@@ -135,10 +135,25 @@ The `form` store is responsible for managing form-related data in this applicati
         ```typescript
         type TUl = {
           label: string;
-          children?: Array<TUl>
+          children?: TUl[]
         }
 
         data: {
           ul : TUl[][]
+        }
+        ```
+
+    - **list-notes**
+      - `data` (Array)
+
+        ```typescript
+        type TUl = {
+          title: string;
+          subtitles?: string[];
+          children: string[][]
+        }
+
+        data: {
+          listNotes : TUl[]
         }
         ```

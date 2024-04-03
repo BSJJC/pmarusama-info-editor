@@ -43,8 +43,9 @@
 </template>
 
 <script setup lang="ts">
+// TODO error
 import { ref, Ref, watch } from 'vue';
-import { useForm } from '@/store/useForm';
+import syncData from '@/utils/syncData';
 
 type TImages = {
   url: string;
@@ -54,8 +55,6 @@ type TImages = {
 const props = defineProps({
   componentId: Number,
 });
-
-const { form } = useForm();
 
 const uploadRef = ref();
 
@@ -97,9 +96,7 @@ function deleteIamge(index: number): void {
 watch(
   () => images.value,
   () => {
-    form.data.components[props.componentId!].data = {
-      images: images.value,
-    };
+    syncData(props.componentId!, { images: images.value });
   },
   {
     immediate: true,

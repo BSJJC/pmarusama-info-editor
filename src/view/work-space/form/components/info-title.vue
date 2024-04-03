@@ -6,6 +6,7 @@
 
 <script setup lang="ts">
 import { ref, Ref, watch } from 'vue';
+import syncData from '@/utils/syncData';
 import { useForm } from '@/store/useForm';
 
 const props = defineProps({
@@ -20,9 +21,8 @@ watch(
   () => title.value,
   () => {
     form.title = title.value;
-    form.data.components[props.componentId!].data = {
-      text: title.value,
-    };
+
+    syncData(props.componentId!, { text: title.value });
   },
   {
     immediate: true,
