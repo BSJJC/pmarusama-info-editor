@@ -1,45 +1,55 @@
 <template>
   <div>
-    <div class="flex flex-col gap-y-8">
-      <el-form
-        label-width="auto"
-        class="flex flex-col gap-y-4"
-        v-for="(listNote, listNoteIndex) in listNoteData"
-        :key="listNote"
-      >
-        <!-- title -->
-        <el-form-item label="title: ">
-          <el-input v-model="listNote.title" />
-        </el-form-item>
+    <div class="flex flex-col gap-y-8 mb-4">
+      <transition-group name="fade" tag="ul" class="relative flex flex-col gap-y-4">
+        <el-form
+          label-width="auto"
+          class="flex w-full justify-between p-2 rounded-lg bg-[#90939920]"
+          v-for="(listNote, listNoteIndex) in listNoteData"
+          :key="listNote"
+        >
+          <!-- list note form -->
+          <div class="w-full flex flex-col gap-y-4">
+            <!-- title -->
+            <el-form-item label="title: ">
+              <el-input v-model="listNote.title" />
+            </el-form-item>
 
-        <!-- subtitles -->
-        <el-form-item v-if="listNote.subtitles" label="subtitles">
-          <el-input
-            v-for="(_, index) in listNote.subtitles"
-            :key="index"
-            v-model="listNote.subtitles[index]"
-          />
-        </el-form-item>
+            <!-- subtitles -->
+            <el-form-item v-if="listNote.subtitles" label="subtitles">
+              <el-input
+                v-for="(_, index) in listNote.subtitles"
+                :key="index"
+                v-model="listNote.subtitles[index]"
+              />
+            </el-form-item>
 
-        <!-- children -->
-        <el-form-item label="children: ">
-          <div class="flex flex-col gap-4 w-full">
-            <div v-for="(maxRows, rowIndex) in listNote.children" :key="rowIndex" class="">
-              <div class="flex gap-x-2">
-                <el-input
-                  v-for="(_, colIndex) in maxRows"
-                  :key="colIndex"
-                  v-model="listNote.children[rowIndex][colIndex]"
-                  @input="reRenderChildren(listNoteIndex)"
-                />
+            <!-- children -->
+            <el-form-item label="children: ">
+              <div class="flex flex-col gap-4 w-full">
+                <div v-for="(maxRows, rowIndex) in listNote.children" :key="rowIndex" class="">
+                  <div class="flex gap-x-2">
+                    <el-input
+                      v-for="(_, colIndex) in maxRows"
+                      :key="colIndex"
+                      v-model="listNote.children[rowIndex][colIndex]"
+                      @input="reRenderChildren(listNoteIndex)"
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
+            </el-form-item>
           </div>
-        </el-form-item>
-      </el-form>
+
+          <!-- delete button -->
+          <div class="w-[15%] flex justify-center items-center">
+            <el-button @click="deleteListNote(listNoteIndex)" type="danger" plain>delete</el-button>
+          </div>
+        </el-form>
+      </transition-group>
     </div>
 
-    <el-button @click="addListNote">add</el-button>
+    <el-button @click="addListNote">add new list note</el-button>
   </div>
 </template>
 
@@ -196,6 +206,27 @@ function reRenderChildren(listNoteIndex: number): void {
     listNoteData.value[listNoteIndex].children.map((row) => row.splice(valuableCol + 2, distance));
   }
 }
+
+function deleteListNote(listNoteIndex: number): void {
+  listNoteData.value.splice(listNoteIndex, 1);
+}
 </script>
 
-<style></style>
+<style scoped>
+.fade-move,
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+  z-index: -1;
+}
+
+.fade-leave-active {
+  position: absolute;
+}
+</style>
