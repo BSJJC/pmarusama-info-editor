@@ -3,8 +3,10 @@
     <el-form>
       <div v-for="(image, index) in images" :key="index" class="mb-14 flex items-center">
         <el-form label-width="auto" class="space-y-4 w-[80%]">
-          <el-form-item label="file: ">
-            <el-button type="primary" @click="selectFile(index)">selct file</el-button>
+          <el-form-item label="image: ">
+            <el-button type="primary" @click="selectFile(index)">
+              {{ images[index].url ? 'change image' : 'select image' }}
+            </el-button>
             <input ref="uploadRef" type="file" class="hidden" @change="handleFiles(index)" />
           </el-form-item>
 
@@ -43,7 +45,6 @@
 </template>
 
 <script setup lang="ts">
-// TODO error
 import { ref, Ref, watch } from 'vue';
 import syncData from '@/utils/syncData';
 
@@ -72,7 +73,7 @@ function selectFile(index: number) {
 
 function handleFiles(index: number) {
   const file = uploadRef.value[index].files[0];
-  previewUrls.value[index] = URL.createObjectURL(file[0]);
+  previewUrls.value[index] = URL.createObjectURL(file);
 
   images.value[index] = {
     url: URL.createObjectURL(file),
