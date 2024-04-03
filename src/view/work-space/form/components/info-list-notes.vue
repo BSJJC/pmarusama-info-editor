@@ -15,13 +15,9 @@
               <el-input v-model="listNote.title" />
             </el-form-item>
 
-            <!-- subtitles -->
-            <el-form-item v-if="listNote.subtitles" label="subtitles">
-              <el-input
-                v-for="(_, index) in listNote.subtitles"
-                :key="index"
-                v-model="listNote.subtitles[index]"
-              />
+            <!-- subtitle -->
+            <el-form-item label="subtitle">
+              <el-input v-model="listNote.subtitle" />
             </el-form-item>
 
             <!-- children -->
@@ -59,7 +55,7 @@ import syncData from '@/utils/syncData';
 
 type TListNote = Array<{
   title: string;
-  subtitles?: Array<string>;
+  subtitle: string;
   children: Array<Array<string>>;
 }>;
 
@@ -70,7 +66,7 @@ const props = defineProps({
 const listNoteData: Ref<TListNote> = ref([
   {
     title: '',
-    subtitles: [''],
+    subtitle: '',
     children: [
       ['', ''],
       ['', ''],
@@ -81,7 +77,7 @@ const listNoteData: Ref<TListNote> = ref([
 function addListNote() {
   listNoteData.value.push({
     title: '',
-    subtitles: [''],
+    subtitle: '',
     children: [
       ['', ''],
       ['', ''],
