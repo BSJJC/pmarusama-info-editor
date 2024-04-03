@@ -15,8 +15,6 @@ type TData = {
 const props = defineProps({
   data: Object as () => TData,
 });
-
-console.log(props.data?.images);
 </script>
 
 <style scoped>
