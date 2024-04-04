@@ -1,44 +1,71 @@
 <template>
-  <div>
-    <el-form>
-      <div v-for="(image, index) in images" :key="index" class="mb-14 flex items-center">
-        <el-form label-width="auto" class="space-y-4 w-[80%]">
-          <el-form-item label="image: ">
-            <el-button type="primary" @click="selectFile(index)">
-              {{ images[index].url ? 'change image' : 'select image' }}
-            </el-button>
-            <input ref="uploadRef" type="file" class="hidden" @change="handleFiles(index)" />
-          </el-form-item>
+  <div class="flex flex-col gap-y-4">
+    <transition-group name="image" tag="ul" class="relative">
+      <div
+        v-for="(image, index) in images"
+        :key="image as unknown as string"
+        class="flex justify-around items-center relative w-full text-[#787878] mb-4"
+      >
+        <div class="w-[80%] mb-2">
+          <!-- select image -->
+          <div class="table-row">
+            <div class="table-cell pb-[10px] pr-[20px]">image:</div>
 
-          <el-form-item label="alt: ">
-            <el-input v-model="image.alt" />
-          </el-form-item>
-
-          <el-form-item label="preview: " v-if="previewUrls[index]">
-            <transition name="preview-img" mode="out-in">
-              <img
-                :src="previewUrls[index]"
-                :key="previewUrls[index]"
-                :alt="image.alt"
-                class="h-[300px] rounded-lg border-[10px] box-content"
+            <div calss="table-cell">
+              <el-button type="primary" @click="selectFile(index)">
+                {{ images[index].url ? 'change image' : 'select image' }}
+              </el-button>
+              <input
+                type="file"
+                :id="`upload-ref-${index}`"
+                class="hidden"
+                @change="handleFiles(index)"
               />
-            </transition>
-          </el-form-item>
-        </el-form>
+            </div>
+          </div>
 
-        <el-button
-          type="danger"
-          plain
-          class="ml-auto"
-          @click="deleteIamge(index)"
-          :disabled="images.length === 1"
-        >
-          delete
-        </el-button>
+          <!-- set alt -->
+          <div class="table-row align-middle">
+            <div class="table-cell pb-[10px] pr-[20px]">alt:</div>
+
+            <div class="table-cell w-full">
+              <el-input v-model="image.alt" />
+            </div>
+          </div>
+
+          <!-- show preview -->
+          <transition name="preview-image">
+            <div v-if="previewUrls[index]" class="table-row">
+              <div class="table-cell align-middle pb-[10px] pr-[10px]">preview:</div>
+
+              <div id="img-container" class="table-cell relative h-[200px] w-full overflow-hidden">
+                <img
+                  :src="previewUrls[index]"
+                  :key="previewUrls[index]"
+                  :alt="image.alt"
+                  class="rounded-lg border-[10px] absolute h-full object-contain"
+                />
+              </div>
+            </div>
+          </transition>
+        </div>
+
+        <!-- delete button -->
+        <div class="w-[20%] flex justify-end items-center">
+          <el-button type="danger" plain @click="deleteIamge(index)">delete</el-button>
+        </div>
       </div>
-    </el-form>
 
-    <el-button type="primary" plain class="w-full" @click="addNewImage">add new image</el-button>
+      <el-button
+        type="primary"
+        :key="`info-images-add-new-button`"
+        plain
+        class="w-full"
+        @click="addNewImage"
+      >
+        add new image
+      </el-button>
+    </transition-group>
   </div>
 </template>
 
@@ -55,8 +82,6 @@ const props = defineProps({
   componentId: Number,
 });
 
-const uploadRef = ref();
-
 const images: Ref<Array<TImages>> = ref([
   {
     url: '',
@@ -66,11 +91,16 @@ const images: Ref<Array<TImages>> = ref([
 const previewUrls: Ref<Array<string>> = ref([]);
 
 function selectFile(index: number) {
-  uploadRef.value[index].click();
+  document.getElementById(`upload-ref-${index}`)!.click();
 }
 
 function handleFiles(index: number) {
-  const file = uploadRef.value[index].files[0];
+  const uploadRef = document.getElementById(`upload-ref-${index}`)! as HTMLInputElement;
+
+  const file = uploadRef.files?.[0];
+
+  if (!file) return;
+
   previewUrls.value[index] = URL.createObjectURL(file);
 
   images.value[index] = {
@@ -105,14 +135,38 @@ watch(
 </script>
 
 <style scoped>
-.preview-img-enter-active,
-.preview-img-leave-active {
+.image-move,
+.image-enter-active,
+.image-leave-active {
   transition: all 0.3s ease-in-out;
 }
 
-.preview-img-enter-from,
-.preview-img-leave-to {
+.image-enter-from,
+.image-leave-to {
   opacity: 0;
-  transform: translateY(-10px);
+  transform: translateX(50px);
+}
+
+.image-leave-active {
+  position: absolute;
+}
+
+.preview-image-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.preview-image-enter-from,
+.preview-image-leave-to {
+  opacity: 0;
+}
+
+.preview-image-active #img-container {
+  transition: all 0.3s ease-in-out;
+}
+
+.preview-image-enter-from #img-container,
+.preview-image-leave-to #img-container {
+  height: 0px;
+  opacity: 0;
 }
 </style>

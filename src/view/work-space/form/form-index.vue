@@ -7,9 +7,9 @@
           <transition-group name="dynamic" tag="ul" class="relative">
             <el-form-item
               v-for="(i, index) in dynamicComponents"
-              :key="index"
+              :key="i"
               :label="`component ${i.value} :`"
-              class="py-4 relative"
+              class="py-4 relative w-full"
             >
               <div v-if="i.deletable" class="absolute top-[-20px] right-[-20px]">
                 <el-icon
@@ -31,7 +31,7 @@
             <!-- in that case, you need to set a key to the add new component manual -->
 
             <!-- add new component -->
-            <el-form-item label="information title :" :key="Math.max()">
+            <el-form-item label="information title :" :key="`form-index-add-new-component`">
               <div class="w-full flex justify-between">
                 <el-select v-model="newComponentName" placeholder="new component" class="w-[90%]">
                   <el-option
