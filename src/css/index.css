@@ -1,7 +1,7 @@
 body {
   background-color: whitesmoke;
   overflow: hidden;
-  font-family: 'M PLUS Rounded 1c', "游ゴシック体", YuGothic, "游ゴシック", 'Yu Gothic', "メイリオ",
+  font-family: 'M PLUS Rounded 1c', '游ゴシック体', YuGothic, '游ゴシック', 'Yu Gothic', 'メイリオ',
     Meiryo, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'ＭＳ Ｐゴシック', 'MS PGothic',
     sans-serif;
 }
@@ -13,16 +13,6 @@ a {
 ::selection {
   color: whitesmoke;
   background: #f60;
-}
-
-.v-enter-active,
-.v-leave-active {
-  transition: all 0.2s ease-in-out;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
 }
 
 /* text color #787878 */

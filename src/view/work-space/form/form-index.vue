@@ -1,13 +1,13 @@
 <template>
-  <div class="w-full py-10 flex justify-center">
+  <div class="w-full py-10">
     <el-scrollbar height="85vh" class="w-full">
       <div class="w-full flex justify-center items-center">
         <el-form ref="formRef" :model="form" label-width="200px" class="w-2/3">
           <!-- render all components -->
-          <TransitionGroup name="dynamic" tag="div" class="relative">
+          <transition-group name="dynamic" tag="ul" class="relative">
             <el-form-item
               v-for="(i, index) in dynamicComponents"
-              :key="i"
+              :key="index"
               :label="`component ${i.value} :`"
               class="py-4 relative"
             >
@@ -26,23 +26,28 @@
                 :component-name="i.value"
               ></dynamic-component>
             </el-form-item>
-          </TransitionGroup>
 
-          <!-- add new component -->
-          <el-form-item label="information title :">
-            <div class="w-full flex justify-between">
-              <el-select v-model="newComponentName" placeholder="new component" class="w-[90%]">
-                <el-option
-                  v-for="name in newComponentNames"
-                  :key="name.value"
-                  :label="name.label"
-                  :value="name.value"
-                />
-              </el-select>
+            <!-- you must put the add new component in the transition group, otherwise the transition when add or delete will not be smooth -->
+            <!-- in that case, you need to set a key to the add new component manual -->
 
-              <el-button :disabled="!newComponentName" @click="addDynamicComponent">add</el-button>
-            </div>
-          </el-form-item>
+            <!-- add new component -->
+            <el-form-item label="information title :" :key="Math.max()">
+              <div class="w-full flex justify-between">
+                <el-select v-model="newComponentName" placeholder="new component" class="w-[90%]">
+                  <el-option
+                    v-for="name in newComponentNames"
+                    :key="name.value"
+                    :label="name.label"
+                    :value="name.value"
+                  />
+                </el-select>
+
+                <el-button :disabled="!newComponentName" @click="addDynamicComponent">
+                  add
+                </el-button>
+              </div>
+            </el-form-item>
+          </transition-group>
 
           <!-- submit button -->
           <el-form-item class="mt-[15vh]">
@@ -157,7 +162,7 @@ watch(
 .dynamic-enter-from,
 .dynamic-leave-to {
   opacity: 0;
-  transform: translateX(30px);
+  transform: translateX(50px);
 }
 
 .dynamic-leave-active {

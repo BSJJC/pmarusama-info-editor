@@ -14,7 +14,7 @@
     </div>
 
     <div class="flex flex-wrap">
-      <TransitionGroup name="fade">
+      <transition-group name="fade">
         <div
           v-for="(i, index) in allShops"
           v-show="i.shopName.includes(searchingShopName)"
@@ -35,7 +35,7 @@
             <span class="text-md">{{ i.shopName }}</span>
           </div>
         </div>
-      </TransitionGroup>
+      </transition-group>
     </div>
 
     <!-- 
