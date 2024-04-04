@@ -1,15 +1,32 @@
 <template>
-  <div>
-    <div v-for="(list, index) in props.data?.listNotes" :key="index">
-      <div
-        v-for="(childrenList, childrenListIndex) in list.children.slice(0, -1)"
-        :key="childrenListIndex"
-      >
-        <div v-for="(child, childIndex) in childrenList.slice(0, -1)" :key="childIndex">
-          <!-- TODO render list note preview -->
-          {{ child }}
-        </div>
-      </div>
+  <div class="flex">
+    <div
+      v-for="(list, index) in props.data?.listNotes"
+      :key="index"
+      class="w-1/2 flex flex-col gap-y-1 text-[#787878]"
+    >
+      <!-- title -->
+      <p class="text-lg font-bold">
+        <strong>
+          {{ list.title }}
+        </strong>
+      </p>
+
+      <!-- subtitle -->
+      <p v-if="list.subtitle">{{ list.subtitle }}</p>
+
+      <!-- children -->
+      <ul calss="table">
+        <li v-for="(cells, cellsIndex) in list.children" :key="cellsIndex" class="table-row">
+          <div
+            v-for="(cell, cellIndex) in cells"
+            :key="cellIndex"
+            :class="cellIndex === 0 ? 'table-cell pr-[0.5rem] font-bold' : 'table-cell'"
+          >
+            {{ cell }}
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
