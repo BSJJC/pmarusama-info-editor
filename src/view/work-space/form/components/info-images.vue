@@ -38,12 +38,16 @@
             <div v-if="previewUrls[index]" class="table-row">
               <div class="table-cell align-middle pb-[10px] pr-[10px]">preview:</div>
 
-              <div id="img-container" class="table-cell relative h-[200px] w-full overflow-hidden">
-                <img
+              <div id="img-container" class="table-cell relative overflow-hidden">
+                <el-image
+                  style="height: 250px"
                   :src="previewUrls[index]"
-                  :key="previewUrls[index]"
+                  :preview-src-list="[previewUrls[index]]"
                   :alt="image.alt"
-                  class="rounded-lg border-[10px] absolute h-full object-contain"
+                  :zoom-rate="1.2"
+                  :max-scale="7"
+                  :min-scale="0.2"
+                  class="rounded-lg border-[10px]"
                 />
               </div>
             </div>
