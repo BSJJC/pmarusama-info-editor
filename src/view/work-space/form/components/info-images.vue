@@ -34,24 +34,22 @@
           </div>
 
           <!-- show preview -->
-          <transition name="preview-image">
-            <div v-if="previewUrls[index]" class="table-row">
-              <div class="table-cell align-middle pb-[10px] pr-[10px]">preview:</div>
+          <div v-if="previewUrls[index]" class="table-row">
+            <div class="table-cell align-middle pb-[10px] pr-[10px]">preview:</div>
 
-              <div id="img-container" class="table-cell relative overflow-hidden">
-                <el-image
-                  style="height: 250px"
-                  :src="previewUrls[index]"
-                  :preview-src-list="[previewUrls[index]]"
-                  :alt="image.alt"
-                  :zoom-rate="1.2"
-                  :max-scale="7"
-                  :min-scale="0.2"
-                  class="rounded-lg border-[10px]"
-                />
-              </div>
+            <div class="table-cell">
+              <el-image
+                style="height: 250px"
+                :src="previewUrls[index]"
+                :preview-src-list="[previewUrls[index]]"
+                :alt="image.alt"
+                :zoom-rate="1.2"
+                :max-scale="7"
+                :min-scale="0.2"
+                class="rounded-lg border-[10px]"
+              />
             </div>
-          </transition>
+          </div>
         </div>
 
         <!-- delete button -->
@@ -153,24 +151,5 @@ watch(
 
 .image-leave-active {
   position: absolute;
-}
-
-.preview-image-active {
-  transition: all 0.3s ease-in-out;
-}
-
-.preview-image-enter-from,
-.preview-image-leave-to {
-  opacity: 0;
-}
-
-.preview-image-active #img-container {
-  transition: all 0.3s ease-in-out;
-}
-
-.preview-image-enter-from #img-container,
-.preview-image-leave-to #img-container {
-  height: 0px;
-  opacity: 0;
 }
 </style>
