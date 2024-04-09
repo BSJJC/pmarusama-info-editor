@@ -5,6 +5,10 @@ type TNewComponentName = {
 
 const newComponentNames: Array<TNewComponentName> = [
   {
+    value: 'table-test',
+    label: 'table-test',
+  },
+  {
     value: 'h1',
     label: 'h1',
   },
