@@ -15,12 +15,7 @@
               <el-button type="primary" @click="selectFile(index)">
                 {{ images[index].url ? 'change image' : 'select image' }}
               </el-button>
-              <input
-                type="file"
-                :id="`upload-ref-${index}`"
-                class="hidden"
-                @change="handleFiles(index)"
-              />
+              <input type="file" ref="imageUploadRef" class="hidden" @change="handleFiles(index)" />
             </div>
           </div>
 
@@ -72,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, watch } from 'vue';
+import { ref, shallowRef, Ref, watch } from 'vue';
 import syncData from '@/utils/syncData';
 
 type TImages = {
@@ -84,6 +79,8 @@ const props = defineProps({
   componentId: Number,
 });
 
+const imageUploadRef = shallowRef();
+
 const images: Ref<Array<TImages>> = ref([
   {
     url: '',
@@ -93,13 +90,11 @@ const images: Ref<Array<TImages>> = ref([
 const previewUrls: Ref<Array<string>> = ref([]);
 
 function selectFile(index: number) {
-  document.getElementById(`upload-ref-${index}`)!.click();
+  imageUploadRef.value[index].click();
 }
 
 function handleFiles(index: number) {
-  const uploadRef = document.getElementById(`upload-ref-${index}`)! as HTMLInputElement;
-
-  const file = uploadRef.files?.[0];
+  const file = imageUploadRef.value[index].files[0];
 
   if (!file) return;
 
